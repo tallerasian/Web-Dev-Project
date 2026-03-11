@@ -1,20 +1,21 @@
 # Web-Dev-Project
 
-# Description of the purpose of the application, explaining its design and use.
+# Project Description
 
+    TODO: Explain the design and use of the project here.
 
-# a table with with each row containing the i UWA ID ii name and iii Github user name of the group members.
+# Collaborators
 | Name | UWA ID | Github Username |
 |---|---|---|
 | Ray | 24278395 | tallerasian |
 | Cell A2 | Cell B2 | Cell C2 |
-| Cell A2 | Cell B2 | Cell C2 |
+| Francis | 23744262 | TheRobbie73 |
 
 
-# ionstructions for how to launch the application.
+# Launching the Application
 
+    TODO: Instructions to launch the project here.
 
+# Testing the Application
 
-# instructions for how to run the tests for the application.
-
-
+    TODO: Instructions to test the project here.
