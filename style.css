@@ -1,13 +1,12 @@
-/*
-    color codes
-    #ffa309
-    #d8540e
-    #f68b26
-    #ffbe4a
-    #fddc8a
-    #fef2db
-    #fffef5
-*/
+:root {
+    --bg-orange: #ffa309;
+    --bg-white: #fffef5;
+    --calender-dark-orange: #d8540e;
+    --calender-orange: #f68b26;
+    --calender-light-orange: #ffbe4a;
+    --calender-yellow: #fddc8a;
+    --calender-white: #fef2db;
+}
 
 * {
     margin: 0;
@@ -17,5 +16,5 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(to top, rgb(255, 136, 0) 0%, #ffd68a 100%);
+    background: linear-gradient(to top, var(--bg-orange) 0%, var(--calender-light-orange) 100%);
 }
