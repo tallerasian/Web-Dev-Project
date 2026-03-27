@@ -1,8 +1,19 @@
- * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+/*
+    color codes
+    #ffa309
+    #d8540e
+    #f68b26
+    #ffbe4a
+    #fddc8a
+    #fef2db
+    #fffef5
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     min-height: 100vh;
