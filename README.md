@@ -11,12 +11,12 @@ Main goal is to make it easier for people to arrange a time or a day to meet up.
     TODO: Explain the design and use of the project here.
 
 # Collaborators
-| Name | UWA ID | Github Username |
-|---|---|---|
-| Ray | 24278395 | tallerasian |
-| Cell A2 | Cell B2 | Cell C2 |
-| Francis | 23744262 | TheRobbie73 |
 
+| Name    | UWA ID   | Github Username |
+| ------- | -------- | --------------- |
+| Ray     | 24278395 | tallerasian     |
+| Francis | 23744262 | TheRobbie73     |
+| Irtiza  | 25086045 | Irtizaanam      |
 
 # Launching the Application
 
