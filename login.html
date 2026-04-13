@@ -2,20 +2,34 @@
 <html lang="en">
     <head> 
         <link rel="stylesheet" href="style.css">
-        <title>Hello, Hello World!</title>
+        <title>Synced – Login</title>
     </head>
+   
     <body>
-        <div class="login-container">
-            <div class="logo">
-                <span class="logo-icon">⟨s⟩</span> ynced
+        <!-- SVG symbol for the logo, use this everytime we want to display the logo -->
+        <svg width="0" height="0" style="position:absolute">
+            <defs>
+                <symbol id="synced-logo" viewBox="0 0 100 100">
+                <path d="M 30 20 Q 18 20 18 36 Q 18 52 50 52 Q 82 52 82 65 Q 82 80 70 80"
+                        fill="none" stroke="#E07800" stroke-width="10" stroke-linecap="round"/>
+                <circle cx="30" cy="20" r="7" fill="#E07800"/>
+                <circle cx="70" cy="80" r="7" fill="#E07800"/>
+                <circle cx="50" cy="52" r="5" fill="#C06010"/>
+                </symbol>
+            </defs>
+        </svg>
+            <div class="login-container">
+                <div class="logo">
+                    <!-- And here for displaying the logo -->
+                    <svg width="36" height="36" viewBox="0 0 100 100"><use href="#synced-logo"/></svg> ynced
+                </div>
+                <input class="input-field" type="text" placeholder="Username:" />
+                <input class="input-field" type="password" placeholder="Password:" />
+                <div class="actions">
+                    <button class="btn">Register</button>
+                    <button class="btn">Sign in</button>
+                </div>
+                <a class="join-link" href="#">Have a code? Join an event →</a>
             </div>
-            <input class="input-field" type="text" placeholder="Username:" />
-            <input class="input-field" type="password" placeholder="Password:" />
-            <div class="actions">
-                <button class="btn">Register</button>
-                <button class="btn">Sign in</button>
-            </div>
-            <a class="join-link" href="#">Have a code? Join an event →</a>
-        </div>
     </body>
 </html>
