@@ -18,7 +18,7 @@ form {
     counter-reset: step-number;
 }
 
-.progress li {
+.progress .node {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -26,7 +26,8 @@ form {
     margin: 10px;
 }
 
-.progress li::before {
+
+.progress .node::before {
     counter-increment: step-number;
     content: counter(step-number);
     width: 50px;
@@ -37,6 +38,12 @@ form {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.progress .active::before {
+    background-color: black;
+    border-color: black;
+    color: white;
 }
 
 /* steps */
