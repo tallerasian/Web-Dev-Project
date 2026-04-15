@@ -49,14 +49,54 @@ form {
 /* steps */
 .steps .step {
     display: none;
+    border: none;
 }
 
 .steps .active {
     display: flex;
+    flex-direction: column;
+}
+
+/* choose event type */
+#event-type {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+#event-type input {
+    width: 0;
+    appearance: none;
+}
+
+#event-type label {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    height: 50px;
+    border: 2px solid;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 5px 10px;
+}
+
+#event-type input:checked + label {
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+.event-type-tab {
+    display: none;
+}
+
+.event-type-tab .active {
+    display: flex;
 }
 
 /* navigation buttons */
-
 .navigation {
     display: flex;
     align-items: flex-start;

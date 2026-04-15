@@ -1,6 +1,11 @@
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM loaded and parsed");
 
+    formNavigation();
+    eventTypeNav();
+})
+
+function formNavigation() {
     let currentStep = 0;
 
     const progress = document.getElementsByClassName("node");
@@ -22,15 +27,32 @@ document.addEventListener("DOMContentLoaded", (event) => {
         submitButton.disabled = (currentStep !== 2);
     }
 
-    prevButton.addEventListener("click", (event) => {
+    prevButton.addEventListener("click", () => {
         if (currentStep > 0) currentStep--;
         updateProgress()
     });
 
-    nextButton.addEventListener("click", (event) => {
+    nextButton.addEventListener("click", () => {
         if (currentStep < 2) currentStep++;
         updateProgress()
     });
 
     updateProgress();
-})
+}
+
+function eventTypeNav() {
+    const eventType = document.getElementById("event-type");
+    const dayEvent = document.getElementById("day-event");
+    const weeklyEvent = document.getElementById("weekly-event");
+    const dayEventTab = document.getElementById("day-event-tab");
+    const weeklyEventTab = document.getElementById("weekly-event-tab");
+
+    function updateEventType() {
+        dayEventTab.classList.toggle("active", dayEvent.checked);
+        weeklyEventTab.classList.toggle("active", weeklyEvent.checked);
+    }
+
+    eventType.addEventListener("change", updateEventType);
+
+    updateEventType();
+}

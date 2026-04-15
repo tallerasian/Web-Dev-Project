@@ -21,18 +21,33 @@
 
             <!-- steps -->
              <div class="steps">
-                <div class="step">
-                    <h3>Step 1</h3>
-                    <p>Dummy content</p>
-                </div>
-                <div class="step">
+                <fieldset class="step">
+                    <!-- radio option determines which event type tab is visible -->
+                    <div id="event-type">
+                        <input type="radio" name="event-type" value="day-event" id="day-event">
+                        <label for="day-event">Specific Day</label>
+                        <input type="radio" name="event-type" value="weekly-event" id="weekly-event">
+                        <label for="weekly-event">Weekly</label>
+                    </div>
+
+                    <div class="event-type-tab" id="day-event-tab">
+                        Dummy text1
+                    </div>
+
+                    <div class="event-type-tab" id="weekly-event-tab">
+                        Dummy text2a
+                    </div>
+                </fieldset>
+
+                <fieldset class="step">
                     <h3>Step 2</h3>
                     <p>Dummy content</p>
-                </div>
-                <div class="step">
+                </fieldset>
+
+                <fieldset class="step">
                     <h3>Step 3</h3>
                     <p>Dummy content</p>
-                </div>
+                </fieldset>
              </div>
 
             <!-- navigational buttons -->
