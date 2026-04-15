@@ -96,6 +96,15 @@ form {
     display: flex;
 }
 
+/* select availability */
+.availability-tab {
+    display: none;
+}
+
+.availability-tab .active {
+    display: flex;
+}
+
 /* navigation buttons */
 .navigation {
     display: flex;
