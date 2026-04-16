@@ -56,7 +56,6 @@ body {
     border-radius: 12px;
     outline: none;
     margin-bottom: 10px;
-    transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .input-field::placeholder {
@@ -90,7 +89,6 @@ body {
     color: var(--calender-dark-orange);
     letter-spacing: 0.02em;
     padding: 4px 2px;
-    transition: color 0.15s;
 }
 
 .btn:hover {
@@ -104,9 +102,287 @@ body {
     font-size: 0.9rem;
     text-decoration: none;
     letter-spacing: 0.01em;
-    transition: color 0.15s;
 }
 
 .join-link:hover {
     color: #ffffff;
+}
+
+
+/* ================================================
+   HOME PAGE STYLES
+   ================================================ */
+
+body.home-page {
+    align-items: stretch;
+    justify-content: stretch;
+    background: var(--bg-orange);
+    padding: 0;
+}
+
+.home-page-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+/* --- TOPBAR --- */
+.home-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+}
+
+.home-logo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-svg {
+    display: block;
+}
+
+.home-wordmark {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #5a2d00;
+    letter-spacing: 0.02em;
+}
+
+.icon-btn {
+    background: #e8e0d0;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.icon-btn:hover {
+    background: var(--calender-white);
+}
+
+/* --- NAV TABS --- */
+.home-nav-tabs {
+    display: flex;
+    gap: 10px;
+    padding: 0 24px 16px 24px;
+}
+
+.nav-tab {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #5a2d00;
+    background: transparent;
+    border: 2px solid #5a2d00;
+    border-radius: 10px;
+    padding: 8px 18px;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+}
+
+.nav-tab.active {
+    background: #5a2d00;
+    color: #fff;
+}
+
+.nav-tab:hover:not(.active) {
+    background: rgba(90, 45, 0, 0.1);
+}
+
+/* --- CONTENT AREA --- */
+.home-content {
+    flex: 1;
+    padding: 0 20px;
+    overflow-y: auto;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* --- EVENTS PANEL --- */
+.events-panel {
+    background: #fdf6e8;
+    border-radius: 16px;
+    padding: 20px 16px;
+}
+
+.panel-title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #8a5a00;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding: 0 4px;
+}
+
+/* --- EVENT CARDS --- */
+.event-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border: 1px solid rgba(200, 160, 80, 0.15);
+}
+
+.event-card:last-child {
+    margin-bottom: 0;
+}
+
+.event-card:hover {
+    box-shadow: 0 2px 12px rgba(180, 100, 0, 0.12);
+}
+
+.event-card-name {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #3a1a00;
+    margin-bottom: 4px;
+}
+
+.event-card-sub {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    color: #a07040;
+}
+
+/* --- BADGES --- */
+.event-card-badge {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: var(--calender-dark-orange);
+    color: #fff;
+}
+
+.event-card-badge.pending {
+    background: #5a2d00;
+    color: #fff;
+}
+
+/* --- CALENDAR TAB --- */
+.mini-calendar {
+    background: #fdf6e8;
+    border-radius: 16px;
+    padding: 20px 16px;
+}
+
+.cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.cal-month {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #3a1a00;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.cal-nav-btn {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: #8a5a00;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1;
+}
+
+.cal-nav-btn:hover {
+    color: var(--calender-dark-orange);
+}
+
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+}
+
+.cal-day-header {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #a07040;
+    letter-spacing: 0.05em;
+    padding-bottom: 6px;
+}
+
+.cal-day {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: #3a1a00;
+    padding: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.cal-day:hover {
+    background: var(--calender-yellow);
+}
+
+.cal-day.today {
+    background: var(--calender-dark-orange);
+    color: #fff;
+    font-weight: 700;
+}
+
+.cal-day.other-month {
+    color: #c8a870;
+}
+
+/* --- BOTTOM ACTIONS --- */
+.bottom-actions {
+    padding: 14px 20px;
+    background: transparent;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 18px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #fff;
+    background: #1a0a00;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #3a1a00;
 }
