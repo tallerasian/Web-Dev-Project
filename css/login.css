@@ -1,0 +1,100 @@
+:root {
+    --bg-orange: #ffa309;
+    --bg-white: #fffef5;
+    --calender-dark-orange: #d8540e;
+    --calender-orange: #f68b26;
+    --calender-light-orange: #ffbe4a;
+    --calender-yellow: #fddc8a;
+    --calender-white: #fef2db;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.login-page {
+    min-height: 100vh;
+    background: linear-gradient(to top, var(--bg-orange) 0%, var(--calender-light-orange) 100%);
+    font-family: Georgia, serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 650px;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.logo {
+    width: 250px;
+    margin-bottom: 30px;
+}
+
+.input-box {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 18px;
+    font-size: 20px;
+    font-family: Georgia, serif;
+    background-color: var(--calender-white);
+    border: 3px solid #8a6d2f;
+    border-radius: 16px;
+    color: #8a6d2f;
+}
+
+.input-box::placeholder {
+    color: #8a6d2f;
+}
+
+.input-box:focus {
+    outline: none;
+    border-color: var(--calender-dark-orange);
+}
+
+.button-line {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.text-button {
+    background: none;
+    border: none;
+    font-size: 22px;
+    font-family: Georgia, serif;
+    color: #2b2108;
+    cursor: pointer;
+}
+
+.text-button:hover {
+    text-decoration: underline;
+}
+
+.join-line {
+    margin-bottom: 15px;
+}
+
+.join-button {
+    background: none;
+    border: none;
+    color: var(--calender-dark-orange);
+    font-size: 18px;
+    font-family: Georgia, serif;
+    cursor: pointer;
+}
+
+.join-button:hover {
+    text-decoration: underline;
+}
+
+#message {
+    min-height: 24px;
+    font-size: 16px;
+    color: #5b451c;
+}
