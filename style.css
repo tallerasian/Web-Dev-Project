@@ -1,20 +1,252 @@
+
 :root {
-    --bg-orange: #ffa309;
-    --bg-white: #fffef5;
-    --calender-dark-orange: #d8540e;
-    --calender-orange: #f68b26;
-    --calender-light-orange: #ffbe4a;
-    --calender-yellow: #fddc8a;
-    --calender-white: #fef2db;
+  --bg:          #F0A500;
+  --brown-dark:  #3D2B00;
+  --brown-mid:   #7A5C00;
+  --card:        #FAF0DC;
+  --card-dark:   #E8D5A3;
+  --white-soft:  #FFFDF5;
+  --brown-btn:   #2C1A00;
+
+  /* heat scale */
+  --heat-0: #FAF0DC;
+  --heat-1: #F5D88A;
+  --heat-2: #F0BC45;
+  --heat-3: #E09020;
+  --heat-4: #C06010;
+  --heat-5: #9A3A00;
+
+  --font: 'Courier Prime', monospace;
+  --radius: 12px;
+  --radius-sm: 8px;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* ─────────────────────────────────────────
+   RESET / BASE
+───────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    min-height: 100vh;
-    background: linear-gradient(to top, var(--bg-orange) 0%, var(--calender-light-orange) 100%);
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--brown-dark);
+  min-height: 100vh;
 }
+
+/* ─────────────────────────────────────────
+   PAGE HEADER  (both pages)
+───────────────────────────────────────── */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 40px 20px;
+}
+
+.header-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--brown-dark);
+}
+
+/* ─────────────────────────────────────────
+   STEP INDICATOR  (both pages)
+───────────────────────────────────────── */
+.steps {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 580px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--brown-dark);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.step-circle.pending {
+  background: transparent;
+  border: 2px solid var(--brown-mid);
+  color: var(--brown-mid);
+}
+
+.step-label {
+  font-size: 14px;
+  color: var(--brown-mid);
+  white-space: nowrap;
+}
+
+.step-line {
+  flex: 1;
+  height: 1px;
+  background: var(--brown-mid);
+  opacity: 0.4;
+  min-width: 48px;
+}
+
+.step-line.done {
+  opacity: 0.7;
+  background: var(--brown-dark);
+}
+
+/* ─────────────────────────────────────────
+   EVENT NAME ROW  (both pages)
+───────────────────────────────────────── */
+.event-label {
+  font-size: 14px;
+  color: var(--brown-mid);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ─────────────────────────────────────────
+   MAIN CONTENT AREA  (both pages)
+───────────────────────────────────────── */
+.content {
+  display: flex;
+  justify-content: center;
+  padding: 24px 40px 40px;
+}
+
+.calendar-card {
+  background: var(--white-soft);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 860px;
+}
+
+/* ─────────────────────────────────────────
+   HEATMAP-DAYS  —  month calendar grid
+───────────────────────────────────────── */
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.month-nav button {
+  background: var(--card);
+  border: 1px solid var(--card-dark);
+  border-radius: var(--radius-sm);
+  width: 34px;
+  height: 34px;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--brown-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.month-nav button:hover { background: var(--card-dark); }
+
+.month-nav span {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brown-dark);
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.dow {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brown-mid);
+  padding-bottom: 6px;
+}
+
+.day {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  color: var(--brown-dark);
+}
+
+.day.empty       { background: transparent; pointer-events: none; border: none; }
+.day.out-of-range { opacity: 0.2; cursor: not-allowed; pointer-events: none; }
+.day.mine        { border-color: var(--brown-dark); }
+.day.today       { box-shadow: 0 0 0 2px #C96000; }
+.day:hover:not(.empty):not(.out-of-range) { filter: brightness(0.9); }
+
+/* ─────────────────────────────────────────
+   HEATMAP-TIMES  —  time-slot grid
+───────────────────────────────────────── */
+.time-grid {
+  display: grid;
+  grid-template-columns: 60px repeat(7, 1fr);
+  user-select: none;
+}
+
+.corner      { height: 28px; }
+
+.day-header {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brown-dark);
+  padding: 6px 0;
+}
+
+.time-label {
+  font-size: 11px;
+  color: var(--brown-mid);
+  text-align: right;
+  padding-right: 8px;
+  height: 24px;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 2px;
+}
+
+.cell {
+  height: 24px;
+  border: 0.5px solid rgba(122, 92, 0, 0.08);
+  cursor: pointer;
+}
+
+.cell:hover  { filter: brightness(0.85); }
+.cell.mine   { outline: 2px solid var(--brown-dark); outline-offset: -2px; }
+
+/* ─────────────────────────────────────────
+   HEAT SCALE  (shared by both pages)
+───────────────────────────────────────── */
+.heat-0 { background: var(--heat-0); }
+.heat-1 { background: var(--heat-1); }
+.heat-2 { background: var(--heat-2); }
+.heat-3 { background: var(--heat-3); }
+.heat-4 { background: var(--heat-4); }
+.heat-5 { background: var(--heat-5); }
+
+.heat-3,
+.heat-4,
+.heat-5 { color: white; }
