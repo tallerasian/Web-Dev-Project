@@ -1,13 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
     <head> 
-        <link rel="stylesheet" href="style.css">
-        <title>Hello, Hello World!</title>
+        <link rel="stylesheet" href="css/login.css">
+        <title>Synced – Login</title>
     </head>
+   
     <body>
-        <h1>Hello World!</h1>
-        <div style="display:flex; justify-content:center; align-items:center; height:100vh;">
-            <input type="text" placeholder="Enter text..." />
+        <!-- SVG symbol for the logo, use this everytime we want to display the logo -->
+        <svg width="0" height="0" style="position:absolute">
+            <defs>
+                <symbol id="synced-logo" viewBox="0 0 100 100">
+                <path d="M 30 20 Q 18 20 18 36 Q 18 52 50 52 Q 82 52 82 65 Q 82 80 70 80"
+                        fill="none" stroke="#E07800" stroke-width="10" stroke-linecap="round"/>
+                <circle cx="30" cy="20" r="7" fill="#E07800"/>
+                <circle cx="70" cy="80" r="7" fill="#E07800"/>
+                <circle cx="50" cy="52" r="5" fill="#C06010"/>
+                </symbol>
+            </defs>
+        </svg>
+
+        <div class="login-container">
+            <div class="logo">
+                <!-- And here for displaying the logo -->
+                <svg width="36" height="36" viewBox="0 0 100 100"><use href="#synced-logo"/></svg> ynced
+            </div>
+
+            <!-- Added id attributes so JS can find these elements -->
+            <input id="username" class="input-field" type="text" placeholder="Username:" />
+            <input id="password" class="input-field" type="password" placeholder="Password:" />
+
+            <!-- Action buttons -->
+            <div class="actions">
+                <button id="registerBtn" class="btn">Register</button>
+                <button id="signinBtn" class="btn">Sign in</button>
+            </div>
+
+            <!-- Message area for feedback -->
+            <p id="message" class="message"></p>
+            <a id="joinBtn" class="join-link" href="#">Have a code? Join an event →</a>
         </div>
+
+        <script src="javascript/login.js"></script>
     </body>
 </html>

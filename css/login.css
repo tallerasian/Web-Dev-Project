@@ -1,0 +1,139 @@
+:root {
+    --bg-orange: #ffa309;
+    --bg-white: #fffef5;
+    --calender-dark-orange: #d8540e;
+    --calender-orange: #f68b26;
+    --calender-light-orange: #ffbe4a;
+    --calender-yellow: #fddc8a;
+    --calender-white: #fef2db;
+    --reg-black: #000000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    height: 100vh;
+    background: linear-gradient(to top, var(--bg-orange) 0%, var(--calender-light-orange) 100%);
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 420px;
+}
+
+.logo {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.input-field {
+    width: 100%;
+    padding: 16px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    color: #8a5a00;
+    background-color: var(--calender-white);
+    border: 2.5px solid var(--calender-orange);
+    border-radius: 12px;
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input-field::placeholder {
+    color: var(--calender-orange);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.input-field:focus {
+    border-color: var(--calender-dark-orange);
+    box-shadow: 0 0 0 2px var(--calender-light-orange);
+    position: relative;
+    z-index: 1;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding: 0 2px;
+}
+
+.btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--calender-dark-orange);
+    letter-spacing: 0.02em;
+    padding: 4px 2px;
+    transition: color 0.15s;
+}
+
+.btn:hover {
+    color: #ffffff;
+}
+
+/* Feedback message shown below the action buttons */
+.message {
+    width: 100%;
+    min-height: 1.4em;
+    margin-top: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.01em;
+    border-radius: 8px;
+    transition: all 0.15s;
+}
+
+.message.error {
+    color: #5a0a00;
+    background-color: #ffe0cc;
+    border: 1.5px solid #d8540e;
+    padding: 8px 14px;
+}
+
+.message.info {
+    color: #5a2e00;
+    background-color: #fff4dd;
+    border: 1.5px solid #f68b26;
+    padding: 8px 14px;
+}
+
+.join-link {
+    margin-top: 28px;
+    color: var(--calender-dark-orange);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: color 0.15s;
+}
+
+.join-link:hover {
+    color: #ffffff;
+}
