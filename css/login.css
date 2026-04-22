@@ -15,7 +15,6 @@
     box-sizing: border-box;
 }
 
-
 body {
     min-height: 100vh;
     height: 100vh;
@@ -95,6 +94,34 @@ body {
 
 .btn:hover {
     color: #ffffff;
+}
+
+/* Feedback message shown below the action buttons */
+.message {
+    width: 100%;
+    min-height: 1.4em;
+    margin-top: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.01em;
+    border-radius: 8px;
+    transition: all 0.15s;
+}
+
+.message.error {
+    color: #5a0a00;
+    background-color: #ffe0cc;
+    border: 1.5px solid #d8540e;
+    padding: 8px 14px;
+}
+
+.message.info {
+    color: #5a2e00;
+    background-color: #fff4dd;
+    border: 1.5px solid #f68b26;
+    padding: 8px 14px;
 }
 
 .join-link {

@@ -18,19 +18,28 @@
                 </symbol>
             </defs>
         </svg>
-            <div class="login-container">
-                <div class="logo">
-                    <!-- And here for displaying the logo -->
-                    <svg width="36" height="36" viewBox="0 0 100 100"><use href="#synced-logo"/></svg> ynced
-                </div>
-                <input class="input-field" type="text" placeholder="Username:" />
-                <input class="input-field" type="password" placeholder="Password:" />
-                <div class="actions">
-                    <button class="btn">Register</button>
-                    <button class="btn">Sign in</button>
-                </div>
-                <a class="join-link" href="#">Have a code? Join an event →</a>
+
+        <div class="login-container">
+            <div class="logo">
+                <!-- And here for displaying the logo -->
+                <svg width="36" height="36" viewBox="0 0 100 100"><use href="#synced-logo"/></svg> ynced
             </div>
-        <script src="js/login.js"></script>
+
+            <!-- Added id attributes so JS can find these elements -->
+            <input id="username" class="input-field" type="text" placeholder="Username:" />
+            <input id="password" class="input-field" type="password" placeholder="Password:" />
+
+            <!-- Action buttons -->
+            <div class="actions">
+                <button id="registerBtn" class="btn">Register</button>
+                <button id="signinBtn" class="btn">Sign in</button>
+            </div>
+
+            <!-- Message area for feedback -->
+            <p id="message" class="message"></p>
+            <a id="joinBtn" class="join-link" href="#">Have a code? Join an event →</a>
+        </div>
+
+        <script src="javascript/login.js"></script>
     </body>
 </html>
