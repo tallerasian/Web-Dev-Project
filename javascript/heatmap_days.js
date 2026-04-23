@@ -20,6 +20,7 @@ let viewMonth = today.getMonth();
 const groupData = {};
 const myData    = {};
 
+// For demo: seed some random data for the whole range
 function dateKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }
@@ -56,6 +57,7 @@ function changeMonth(dir) {
   render();
 }
 
+// Toggle entire day when header clicked
 function toggleDay(el) {
   const k = el.dataset.key;
   if (el.dataset.inrange !== 'true') return;
@@ -70,6 +72,7 @@ function toggleDay(el) {
 
   render();
 }
+
 
 function render() {
   const container = document.getElementById('calendar');
@@ -115,6 +118,7 @@ function render() {
   container.innerHTML = html;
 }
 
+// 
 document.addEventListener('DOMContentLoaded', () => {
   seedGroupData();
   render();
