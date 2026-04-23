@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Synced – Home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="home-page">
 
@@ -35,7 +35,7 @@
     <div class="home-nav-tabs">
         <button class="nav-tab active" onclick="switchTab(this, 'tab-events')">My Events</button>
         <button class="nav-tab" onclick="switchTab(this, 'tab-calendar')">My Calendar</button>
-        <button class="nav-tab">Join Event</button> <!-- TO DO: This could open a modal or navigate to a join page --> 
+        <button class="nav-tab" onclick="switchTab(this, 'tab-join')">Join Event</button>
     </div>
 
     <!-- CONTENT -->
@@ -45,7 +45,6 @@
         <div id="tab-events" class="tab-content active">
             <div class="events-panel">
                 <div class="panel-title">Upcoming Events</div>
-
                 <div class="event-card">
                     <div>
                         <div class="event-card-name">Team Lunch</div>
@@ -53,9 +52,6 @@
                     </div>
                     <span class="event-card-badge">OPEN</span>
                 </div>
-
-               
-
                 <div class="event-card">
                     <div>
                         <div class="event-card-name">Game Night</div>
@@ -63,7 +59,6 @@
                     </div>
                     <span class="event-card-badge pending">PENDING</span>
                 </div>
-
             </div>
         </div>
 
@@ -79,6 +74,17 @@
             </div>
         </div>
 
+        <!-- JOIN EVENT TAB -->
+        <div id="tab-join" class="tab-content">
+            <div class="events-panel">
+                <div class="panel-title">Join an Event</div>
+                <p class="join-instructions">Enter the 6-character code shared by your event organiser.</p>
+                <input id="join-code-input" class="input-field join-code-field" maxlength="6" placeholder="ABC123" autocomplete="off" spellcheck="false" />
+                <div class="join-feedback" id="join-feedback"></div>
+                <button class="btn-primary" onclick="submitJoinCode()">Join Event</button>
+            </div>
+        </div>
+
     </div>
 
     <!-- BOTTOM ACTIONS -->
@@ -87,7 +93,7 @@
     </div>
 
 </div>
-
+<script src="javascript/home.js"></script>
 
 </body>
 </html>
