@@ -66,6 +66,7 @@ function eventTypeNav() {
     updateEventType();
 }
 
+// select day within range of days
 function dailyCalender() {
     const monthLabel = document.getElementById("cal-month-label");
     const calGrid = document.getElementById("event-cal-grid");
