@@ -80,8 +80,8 @@ function toggleDay(el) {
   }
 
   render();
+  updatePopular();
 }
-
 
 function render() {
   const container = document.getElementById('calendar');
@@ -153,8 +153,44 @@ function clearPanel() {
   document.getElementById('hover-panel').classList.remove('visible');
 }
 
+// Generate a random 6-char share code once and set it immediately
+const SHARE_CODE = Math.random().toString(36).slice(2, 8).toUpperCase();
+
+function initShareCode() {
+  const el = document.getElementById('share-code');
+  if (el) el.textContent = SHARE_CODE;
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(SHARE_CODE).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'copied!';
+    setTimeout(() => { btn.textContent = 'copy'; }, 1500);
+  });
+}
+
+function updatePopular() {
+  let bestKey = null, bestCount = 0;
+  for (const [k, count] of Object.entries(groupData)) {
+    if (count > bestCount) { bestCount = count; bestKey = k; }
+  }
+  const valueEl = document.getElementById('popular-value');
+  const countEl = document.getElementById('popular-count');
+  if (!bestKey || bestCount === 0) {
+    valueEl.textContent = '—';
+    countEl.textContent = '';
+    return;
+  }
+  const [y, m, d] = bestKey.split('-');
+  const date = new Date(+y, +m - 1, +d);
+  valueEl.textContent = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  countEl.textContent = `${bestCount} ${bestCount === 1 ? 'person' : 'people'}`;
+}
+
 // 
 document.addEventListener('DOMContentLoaded', () => {
   seedGroupData();
   render();
+  updatePopular();
+  initShareCode();
 });

@@ -33,9 +33,22 @@
     <div class="calendar-card">
       <div id="grid" class="time-grid"></div>
     </div>
-    <aside id="hover-panel" class="hover-panel">
-      <p id="panel-title" class="panel-title"></p>
-      <ul id="panel-list" class="panel-list"></ul>
+    <aside class="side-panels">
+      <div class="side-panel" id="popular-panel">
+        <p class="side-panel-label">most popular</p>
+        <p id="popular-value" class="side-panel-value">—</p>
+        <p id="popular-count" class="side-panel-sub"></p>
+      </div>
+      <div class="side-panel" id="share-panel">
+        <p class="side-panel-label">share code</p>
+        <p id="share-code" class="share-code"></p>
+        <button class="copy-btn" onclick="copyCode()">copy</button>
+      </div>
+      <div class="side-panel hover-panel" id="hover-panel">
+        <p class="side-panel-label">available</p>
+        <p id="panel-title" class="side-panel-value">—</p>
+        <ul id="panel-list" class="panel-list"></ul>
+      </div>
     </aside>
   </div>
 

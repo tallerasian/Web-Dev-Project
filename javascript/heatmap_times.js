@@ -43,34 +43,35 @@ function seedGroupData() {
 let isDragging = false;
 let dragMode   = 'add'; // 'add' or 'remove'
 
-const myPrev = {}; // stores groupData value before user selected a cell
+const myPrev = {};
 
-function applyCell(cell) {
-  const k = cell.dataset.key;
+function applyCell(el) {
+  const k = el.dataset.key;
   if (!k) return;
 
   if (dragMode === 'add') {
     if (myData[k]) {
-      // restore to exactly what it was before the user selected it
-      groupData[k]  = myPrev[k] ?? Math.max(0, (groupData[k] || 0) - 1);
+      // deselect — restore to exactly what it was before
+      groupData[k]   = myPrev[k] ?? Math.max(0, (groupData[k] || 0) - 1);
       delete myData[k];
       delete myPrev[k];
-      peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
+      peopleData[k]  = (peopleData[k] || []).filter(n => n !== 'You');
     } else {
-      myPrev[k]     = groupData[k] || 0;  // remember previous count
-      myData[k]     = true;
-      groupData[k]  = Math.min(5, (groupData[k] || 0) + 1);
-      peopleData[k] = ['You', ...(peopleData[k] || [])];
+      myPrev[k]      = groupData[k] || 0;
+      myData[k]      = true;
+      groupData[k]   = Math.min(5, (groupData[k] || 0) + 1);
+      peopleData[k]  = ['You', ...(peopleData[k] || [])];
     }
   } else {
     if (!myData[k]) return;
-    groupData[k]  = myPrev[k] ?? Math.max(0, (groupData[k] || 0) - 1);
+    groupData[k]   = myPrev[k] ?? Math.max(0, (groupData[k] || 0) - 1);
     delete myData[k];
     delete myPrev[k];
-    peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
+    peopleData[k]  = (peopleData[k] || []).filter(n => n !== 'You');
   }
 
-  cell.className = cellClass(k);
+  el.className = cellClass(k);
+  updatePopular();
 }
 
 function cellClass(k) {
@@ -150,9 +151,43 @@ function clearPanel() {
   document.getElementById('hover-panel').classList.remove('visible');
 }
 
+const SHARE_CODE = Math.random().toString(36).slice(2, 8).toUpperCase();
+
+function initShareCode() {
+  const el = document.getElementById('share-code');
+  if (el) el.textContent = SHARE_CODE;
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(SHARE_CODE).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'copied!';
+    setTimeout(() => { btn.textContent = 'copy'; }, 1500);
+  });
+}
+
+function updatePopular() {
+  let bestKey = null, bestCount = 0;
+  for (const [k, count] of Object.entries(groupData)) {
+    if (count > bestCount) { bestCount = count; bestKey = k; }
+  }
+  const valueEl = document.getElementById('popular-value');
+  const countEl = document.getElementById('popular-count');
+  if (!bestKey || bestCount === 0) {
+    valueEl.textContent = '—';
+    countEl.textContent = '';
+    return;
+  }
+  const [d, s] = bestKey.split('-').map(Number);
+  valueEl.textContent = `${DAY_NAMES[d]}, ${slotFullLabel(s)}`;
+  countEl.textContent = `${bestCount} ${bestCount === 1 ? 'person' : 'people'}`;
+}
+
 document.addEventListener('mouseup', () => { isDragging = false; });
 
 document.addEventListener('DOMContentLoaded', () => {
   seedGroupData();
   render();
+  updatePopular();
+  initShareCode();
 });
