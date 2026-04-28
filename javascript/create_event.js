@@ -68,11 +68,13 @@ function eventTypeNav() {
 
 
 function dailyCalender() {
-    const monthLabel = document.getElementById('cal-month-label');
-    const calGrid = document.getElementById('cal-grid');
+    const monthLabel = document.getElementById("cal-month-label");
+    const calGrid = document.getElementById("event-cal-grid");
+    const fromDate = document.getElementById("day-event-from");
+    const toDate = document.getElementById("day-event-to");
 
-    const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
-    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const DAYS = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+    const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     let calYear, calMonth;
 
     function buildCalender() {
@@ -86,7 +88,10 @@ function dailyCalender() {
 
         const firstDay = new Date(calYear, calMonth, 1).getDay();
         const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+        const rangeStart = fromDate.value ? new Date(fromDate.value) : null;
+        const rangeEnd = toDate.value ? new Date(toDate.value) : null;
 
+        // generate day headers
         DAYS.map(day => {
             const dayDiv = document.createElement("div");
             const dayContent = document.createTextNode(day);
@@ -95,18 +100,43 @@ function dailyCalender() {
             calGrid.appendChild(dayDiv);
         });
 
-        // add empty day cells
+        // add empty day cells before the 1st of the month
         for (let day = 0; day < firstDay; day++) {
             const dayDiv = document.createElement("div");
             dayDiv.classList.add("cal-day", "empty");
             calGrid.appendChild(dayDiv);
         }
+
+        // add numbered day cells. days within the chosen range will be checkboxes
         for (let day = 1; day <= daysInMonth; day++) {
-            const dayDiv = document.createElement("div");
-            const dayContent = document.createTextNode(day);
-            dayDiv.appendChild(dayContent);
-            dayDiv.classList.add("cal-day");
-            calGrid.appendChild(dayDiv);
+            const currentDate = new Date(calYear, calMonth, day);
+
+            console.log(rangeStart, rangeEnd);
+            if (rangeStart <= currentDate && currentDate <= rangeEnd) {
+                const id = `cal-day-${day}`
+
+                const dayLabel = document.createElement("label");
+                const dayContent = document.createTextNode(day);
+                dayLabel.appendChild(dayContent);
+                dayLabel.classList.add("cal-day");
+                dayLabel.for = id;
+                calGrid.appendChild(dayLabel);
+
+                const dayCheckbox = document.createElement("input");
+                dayCheckbox.type = "checkbox";
+                dayCheckbox.value = day;
+                dayCheckbox.classList.add("cal-day-checkbox");
+                dayCheckbox.id = id;
+                dayCheckbox.name = "cal-day-select";
+                dayLabel.appendChild(dayCheckbox);
+
+            } else {
+                const dayDiv = document.createElement("div");
+                const dayContent = document.createTextNode(day);
+                dayDiv.appendChild(dayContent);
+                dayDiv.classList.add("cal-day");
+                calGrid.appendChild(dayDiv);
+            }
         }
     }
 

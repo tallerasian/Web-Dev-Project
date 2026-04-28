@@ -638,6 +638,26 @@ form {
     color: white;
 }
 
+/* day event calender */
+.cal-day-checkbox {
+    width: 0;
+    appearance: none;
+}
+
+#event-cal-grid div.cal-day {
+    color: var(--calender-yellow);
+}
+
+label.cal-day:has(> input:checked) {
+    background: var(--calender-dark-orange);
+    color: #fff;
+    font-weight: 700;
+}
+
+label.cal-day:hover {
+    background: var(--calender-yellow);
+}
+
 /* Navigation buttons */
 .navigation {
     display: flex;
