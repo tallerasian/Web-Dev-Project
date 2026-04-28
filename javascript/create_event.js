@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     formNavigation();
     eventTypeNav();
+    dailyCalender();
 })
 
 function formNavigation() {
@@ -63,4 +64,64 @@ function eventTypeNav() {
     eventType.addEventListener("change", updateEventType);
 
     updateEventType();
+}
+
+
+function dailyCalender() {
+    const monthLabel = document.getElementById('cal-month-label');
+    const calGrid = document.getElementById('cal-grid');
+
+    const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    let calYear, calMonth;
+
+    function buildCalender() {
+        const now = new Date();
+        if (calYear === undefined) {
+            calYear = now.getFullYear();
+            calMonth = now.getMonth();
+        }
+
+        monthLabel.textContent = `${MONTHS[calMonth]} ${calYear}`;
+
+        const firstDay = new Date(calYear, calMonth, 1).getDay();
+        const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+        DAYS.map(day => {
+            const dayDiv = document.createElement("div");
+            const dayContent = document.createTextNode(day);
+            dayDiv.appendChild(dayContent);
+            dayDiv.classList.add("cal-day-header");
+            calGrid.appendChild(dayDiv);
+        });
+
+        // add empty day cells
+        for (let day = 0; day < firstDay; day++) {
+            const dayDiv = document.createElement("div");
+            dayDiv.classList.add("cal-day", "empty");
+            calGrid.appendChild(dayDiv);
+        }
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayDiv = document.createElement("div");
+            const dayContent = document.createTextNode(day);
+            dayDiv.appendChild(dayContent);
+            dayDiv.classList.add("cal-day");
+            calGrid.appendChild(dayDiv);
+        }
+    }
+
+    function calNav(dir) {
+        calMonth += dir;
+        if (calMonth > 11) { calMonth = 0; calYear++; }
+        if (calMonth < 0)  { calMonth = 11; calYear--; }
+        buildCalendar();
+    }
+
+    const prevMonth = document.getElementById("cal-nav-prev");
+    const nextMonth = document.getElementById("cal-nav-next");
+
+    prevMonth.addEventListener("onclick", function() { calNav(-1); });
+    nextMonth.addEventListener("onclick", function() { calNav(1); });
+
+    buildCalender();
 }

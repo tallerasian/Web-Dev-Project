@@ -72,11 +72,23 @@
                     <div class="availability-tab" id="day-event-availability">
                         <h3>Day Event</h3>
                         <p>Click and drag to mark your availability. Click and drag selected regions to unselect them</p>
+                        
+                        
+                        <div class="mini-calendar">
+                            <div class="cal-nav">
+                                <button type="button" class="cal-nav-btn" id="cal-nav-prev">‹</button>
+                                <span class="cal-month" id="cal-month-label"></span>
+                                <button type="button" class="cal-nav-btn" id="cal-nav-next">›</button>
+                            </div>
+                            <div class="cal-grid" id="cal-grid"></div>
+                        </div>
+                        
                     </div>
 
                     <div class="availability-tab" id="weekly-event-availability">
                         <h3>Weekly Event</h3>
                         <p>Click and drag to mark your availability. Click and drag selected regions to unselect them</p>
+                        <div id="weekly-calender"></div>
                     </div>
                 </fieldset>
 
