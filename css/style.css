@@ -132,6 +132,10 @@ body.login-page {
     color: #ffffff;
 }
 
+.btn:disabled {
+    color: var(--calender-yellow);
+}
+
 /* Feedback message shown below the action buttons */
 .message {
     width: 100%;
@@ -598,6 +602,40 @@ form {
 
 .availability-tab .active {
     display: flex;
+}
+
+/* Select weekly event days */
+#weekly-event-days {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid var(--calender-dark-orange);;
+    border-radius: 10px;
+}
+
+#weekly-event-days input {
+    width: 0;
+    appearance: none;
+}
+
+#weekly-event-days label {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    height: 50px;
+    padding: 5px 10px;
+}
+
+#weekly-event-days label + input + label {
+    border-left: 2px solid var(--calender-dark-orange);
+}
+
+#weekly-event-days input:checked + label {
+    background-color: black;
+    color: white;
 }
 
 /* Navigation buttons */

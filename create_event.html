@@ -21,21 +21,49 @@
             <!-- steps -->
              <div class="steps">
                 <fieldset class="step">
+                    <label for="event-name">Event Name</label>
+                    <input type="text" name="event-name" id="event-name" class="input-field" placeholder="What's the event?">
+                    <label for="event-location">Location</label>
+                    <input type="text" name="event-location" id="event-location" class="input-field" placeholder="Enter location...">
+                    <label for="event-info">Details</label>
+                    <input type="text" name="event-info" id="event-info" class="input-field" placeholder="Add any extra details...">
+
                     <h2>Choose the type of event</h2>
                     <!-- radio option determines which event type tab is visible -->
                     <div id="event-type">
                         <input type="radio" name="event-type" value="day-event" id="day-event">
-                        <label for="day-event">Specific Day</label>
+                        <label for="day-event" class="btn">Specific Day</label>
                         <input type="radio" name="event-type" value="weekly-event" id="weekly-event">
-                        <label for="weekly-event">Weekly</label>
+                        <label for="weekly-event" class="btn">Weekly</label>
                     </div>
 
                     <div class="event-type-tab" id="day-event-tab">
                         <p>Select a range of dates. Your group will decide on one of those dates</p>
+                        <label for="day-event-from">From:</label>
+                        <input type="date" name="day-event-from" id="day-event-from" class="input-field">
+                        <label for="day-event-to">To:</label>
+                        <input type="date" name="day-event-to" id="day-event-to" class="input-field">
                     </div>
 
                     <div class="event-type-tab" id="weekly-event-tab">
                         <p>Select certain days of the week. Your group will decide on time ranges within those days</p>
+                        <!-- TODO: when migrating to Jinja, automate this with for loop -->
+                         <div id="weekly-event-days">
+                            <input type="checkbox" name="weekly-day" value="mon" id="weekly-mon">
+                            <label for="weekly-mon" class="btn">Mon</label>
+                            <input type="checkbox" name="weekly-day" value="tue" id="weekly-tue">
+                            <label for="weekly-tue" class="btn">Tue</label>
+                            <input type="checkbox" name="weekly-day" value="wed" id="weekly-wed">
+                            <label for="weekly-wed" class="btn">Wed</label>
+                            <input type="checkbox" name="weekly-day" value="thu" id="weekly-thu">
+                            <label for="weekly-thu" class="btn">Thu</label>
+                            <input type="checkbox" name="weekly-day" value="fri" id="weekly-fri">
+                            <label for="weekly-fri" class="btn">Fri</label>
+                            <input type="checkbox" name="weekly-day" value="sat" id="weekly-sat">
+                            <label for="weekly-sat" class="btn">Sat</label>
+                            <input type="checkbox" name="weekly-day" value="sun" id="weekly-sun">
+                            <label for="weekly-sun" class="btn">Sun</label>
+                         </div>
                     </div>
                 </fieldset>
 
@@ -60,9 +88,9 @@
 
             <!-- navigational buttons -->
             <div class="navigation">
-                <button type="button" id="prev">Previous</button>
-                <button type="button" id="next">Next</button>
-                <button type="submit" id="submit">Create Event</button>
+                <button type="button" id="prev" class="btn">Previous</button>
+                <button type="button" id="next" class="btn">Next</button>
+                <button type="submit" id="submit" class="btn">Create Event</button>
             </div>
         </form>
         <!-- script placed at the end, when DOM is fully loaded -->
