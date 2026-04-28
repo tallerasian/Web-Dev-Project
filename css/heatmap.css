@@ -1,4 +1,3 @@
-
 :root {
   --bg:          #F0A500;
   --brown-dark:  #3D2B00;
@@ -250,3 +249,60 @@ body {
 .heat-3,
 .heat-4,
 .heat-5 { color: white; }
+
+/* ─────────────────────────────────────────
+   HOVER PANEL  (both pages)
+───────────────────────────────────────── */
+.content {
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.hover-panel {
+  width: 160px;
+  flex-shrink: 0;
+  background: var(--white-soft);
+  border-radius: var(--radius);
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+  position: sticky;
+  top: 24px;
+}
+
+.hover-panel.visible {
+  opacity: 1;
+}
+
+.hover-panel .panel-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brown-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.hover-panel .panel-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hover-panel .panel-list li {
+  font-size: 13px;
+  color: var(--brown-dark);
+}
+
+.hover-panel .panel-list .panel-you {
+  font-weight: 700;
+  color: var(--calender-dark-orange, #d8540e);
+}
+
+.hover-panel .panel-list .panel-empty {
+  font-size: 12px;
+  color: var(--brown-mid);
+  font-style: italic;
+}

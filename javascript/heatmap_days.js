@@ -17,8 +17,12 @@ let range = {
 let viewYear  = today.getFullYear();
 let viewMonth = today.getMonth();
 
-const groupData = {};
-const myData    = {};
+const groupData  = {};
+const myData     = {};
+const peopleData = {}; // key -> string[]
+
+// Fake participant names for demo
+const FAKE_NAMES = ['Alice','Ben','Clara','Diego','Eva','Felix','Grace','Hugo','Isla','Jake'];
 
 // For demo: seed some random data for the whole range
 function dateKey(y, m, d) {
@@ -42,9 +46,12 @@ function seedGroupData() {
     const mid     = cur.getDate() >= 8 && cur.getDate() <= 22;
     const weekend = dow === 0 || dow === 6;
     if (groupData[k] === undefined) {
-      if (!weekend && mid)  groupData[k] = Math.floor(Math.random() * 3) + 2;
-      else if (!weekend)    groupData[k] = Math.floor(Math.random() * 2) + 1;
-      else                  groupData[k] = Math.random() < 0.3 ? 1 : 0;
+      let count;
+      if (!weekend && mid)  count = Math.floor(Math.random() * 3) + 2;
+      else if (!weekend)    count = Math.floor(Math.random() * 2) + 1;
+      else                  count = Math.random() < 0.3 ? 1 : 0;
+      groupData[k]  = count;
+      peopleData[k] = FAKE_NAMES.slice().sort(() => 0.5 - Math.random()).slice(0, count);
     }
     cur.setDate(cur.getDate() + 1);
   }
@@ -65,9 +72,11 @@ function toggleDay(el) {
   if (myData[k]) {
     delete myData[k];
     groupData[k] = Math.max(0, (groupData[k] || 0) - 1);
+    peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
   } else {
     myData[k]    = true;
     groupData[k] = Math.min(5, (groupData[k] || 0) + 1);
+    peopleData[k] = ['You', ...(peopleData[k] || [])];
   }
 
   render();
@@ -116,6 +125,32 @@ function render() {
   html += `</div>`;
 
   container.innerHTML = html;
+
+  // Hover: update sidebar panel
+  container.querySelectorAll('.day:not(.empty):not(.out-of-range)').forEach(el => {
+    el.addEventListener('mouseenter', () => showPanel(el.dataset.key));
+    el.addEventListener('mouseleave', clearPanel);
+  });
+}
+
+function showPanel(key) {
+  const panel      = document.getElementById('hover-panel');
+  const titleEl    = document.getElementById('panel-title');
+  const listEl     = document.getElementById('panel-list');
+  const people     = peopleData[key] || [];
+  const [y, m, d]  = key.split('-');
+  const date       = new Date(+y, +m - 1, +d);
+  const label      = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+  titleEl.textContent = label;
+  listEl.innerHTML = people.length
+    ? people.map(n => `<li class="${n === 'You' ? 'panel-you' : ''}">${n}</li>`).join('')
+    : `<li class="panel-empty">no responses yet</li>`;
+  panel.classList.add('visible');
+}
+
+function clearPanel() {
+  document.getElementById('hover-panel').classList.remove('visible');
 }
 
 // 

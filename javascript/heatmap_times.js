@@ -5,10 +5,11 @@ const END_HOUR    = 17;  // 5pm
 const SLOTS_PER_HOUR = 4; // 15-min slots
 const TOTAL_SLOTS = (END_HOUR - START_HOUR) * SLOTS_PER_HOUR;
 
-// groupData[key] = 0–5 (how many people are free at this slot)
-// myData[key]    = true if the current user marked this slot
-const groupData = {};
-const myData    = {};
+const groupData  = {};
+const myData     = {};
+const peopleData = {}; // key -> string[]
+
+const FAKE_NAMES = ['Alice','Ben','Clara','Diego','Eva','Felix','Grace','Hugo','Isla','Jake'];
 
 // key format: "dayIndex-slotIndex"  e.g. "0-0" = Mon 9:00am
 function slotKey(day, slot) {
@@ -23,16 +24,16 @@ function slotLabel(slot) {
   return m === 0 ? `${hour}:00 ${suffix}` : '';
 }
 
-// Seed fake group availability
 function seedGroupData() {
   for (let d = 0; d < 7; d++) {
     for (let s = 0; s < TOTAL_SLOTS; s++) {
       const k = slotKey(d, s);
       if (groupData[k] === undefined) {
-        // Tue–Thu midday slightly busier
-        groupData[k] = (d >= 1 && d <= 3 && s >= 4 && s <= 24)
+        const count = (d >= 1 && d <= 3 && s >= 4 && s <= 24)
           ? Math.floor(Math.random() * 4) + 1
           : (Math.random() < 0.25 ? Math.floor(Math.random() * 2) : 0);
+        groupData[k]  = count;
+        peopleData[k] = FAKE_NAMES.slice().sort(() => 0.5 - Math.random()).slice(0, count);
       }
     }
   }
@@ -42,22 +43,34 @@ function seedGroupData() {
 let isDragging = false;
 let dragMode   = 'add'; // 'add' or 'remove'
 
-function applyCell(el) {
-  const k = el.dataset.key;
+const myPrev = {}; // stores groupData value before user selected a cell
+
+function applyCell(cell) {
+  const k = cell.dataset.key;
   if (!k) return;
 
   if (dragMode === 'add') {
-    if (myData[k]) return;
-    myData[k]    = true;
-    groupData[k] = Math.min(5, (groupData[k] || 0) < 2 ? 3 : (groupData[k] || 0));
+    if (myData[k]) {
+      // restore to exactly what it was before the user selected it
+      groupData[k]  = myPrev[k] ?? Math.max(0, (groupData[k] || 0) - 1);
+      delete myData[k];
+      delete myPrev[k];
+      peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
+    } else {
+      myPrev[k]     = groupData[k] || 0;  // remember previous count
+      myData[k]     = true;
+      groupData[k]  = Math.min(5, (groupData[k] || 0) + 1);
+      peopleData[k] = ['You', ...(peopleData[k] || [])];
+    }
   } else {
     if (!myData[k]) return;
+    groupData[k]  = myPrev[k] ?? Math.max(0, (groupData[k] || 0) - 1);
     delete myData[k];
-    groupData[k] = Math.max(0, (groupData[k] || 0) - 1);
+    delete myPrev[k];
+    peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
   }
 
-  // Update just this cell's class instead of full re-render
-  el.className = cellClass(k);
+  cell.className = cellClass(k);
 }
 
 function cellClass(k) {
@@ -101,10 +114,40 @@ function render() {
 
   container.addEventListener('mouseover', e => {
     if (isDragging && e.target.dataset.key) applyCell(e.target);
+    if (e.target.dataset.key) showPanel(e.target.dataset.key);
   });
+
+  container.addEventListener('mouseleave', clearPanel);
 
   // Prevent text selection while dragging
   container.addEventListener('mousedown', e => e.preventDefault());
+}
+
+function slotFullLabel(slot) {
+  const h = START_HOUR + Math.floor(slot / SLOTS_PER_HOUR);
+  const m = (slot % SLOTS_PER_HOUR) * 15;
+  const suffix = h < 12 ? 'am' : 'pm';
+  const hour   = h <= 12 ? h : h - 12;
+  return `${hour}:${String(m).padStart(2,'0')} ${suffix}`;
+}
+
+function showPanel(key) {
+  const panel   = document.getElementById('hover-panel');
+  const titleEl = document.getElementById('panel-title');
+  const listEl  = document.getElementById('panel-list');
+  const [d, s]  = key.split('-').map(Number);
+  const people  = peopleData[key] || [];
+  const label   = `${DAY_NAMES[d]}, ${slotFullLabel(s)}`;
+
+  titleEl.textContent = label;
+  listEl.innerHTML = people.length
+    ? people.map(n => `<li class="${n === 'You' ? 'panel-you' : ''}">${n}</li>`).join('')
+    : `<li class="panel-empty">no responses yet</li>`;
+  panel.classList.add('visible');
+}
+
+function clearPanel() {
+  document.getElementById('hover-panel').classList.remove('visible');
 }
 
 document.addEventListener('mouseup', () => { isDragging = false; });
