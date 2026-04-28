@@ -66,7 +66,6 @@ function eventTypeNav() {
     updateEventType();
 }
 
-
 function dailyCalender() {
     const monthLabel = document.getElementById("cal-month-label");
     const calGrid = document.getElementById("event-cal-grid");
@@ -75,9 +74,15 @@ function dailyCalender() {
 
     const DAYS = ["Su","Mo","Tu","We","Th","Fr","Sa"];
     const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
     let calYear, calMonth;
 
     function buildCalender() {
+        // clear calender first!
+        while (calGrid.firstChild) {
+            calGrid.removeChild(calGrid.lastChild);
+        }
+
         const now = new Date();
         if (calYear === undefined) {
             calYear = now.getFullYear();
@@ -111,7 +116,6 @@ function dailyCalender() {
         for (let day = 1; day <= daysInMonth; day++) {
             const currentDate = new Date(calYear, calMonth, day);
 
-            console.log(rangeStart, rangeEnd);
             if (rangeStart <= currentDate && currentDate <= rangeEnd) {
                 const id = `cal-day-${day}`
 
@@ -140,18 +144,27 @@ function dailyCalender() {
         }
     }
 
-    function calNav(dir) {
-        calMonth += dir;
-        if (calMonth > 11) { calMonth = 0; calYear++; }
-        if (calMonth < 0)  { calMonth = 11; calYear--; }
-        buildCalendar();
-    }
-
     const prevMonth = document.getElementById("cal-nav-prev");
     const nextMonth = document.getElementById("cal-nav-next");
 
-    prevMonth.addEventListener("onclick", function() { calNav(-1); });
-    nextMonth.addEventListener("onclick", function() { calNav(1); });
+    console.log(prevMonth);
+
+    prevMonth.addEventListener("click", () => {
+        calMonth--;
+        if (calMonth < 0) {
+            calMonth = 11;
+            calYear--;
+        }
+        buildCalender();
+    });
+    nextMonth.addEventListener("click", () => {
+        calMonth++;
+        if (calMonth > 11) {
+            calMonth = 0;
+            calYear++;
+        }
+        buildCalender();
+    });
 
     buildCalender();
 }
