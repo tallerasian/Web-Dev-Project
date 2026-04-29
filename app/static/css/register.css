@@ -1,83 +1,99 @@
 :root {
-  --bg-orange: #ffa309;
-  --bg-white: #fffef5;
-  --calender-dark-orange: #d8540e;
-  --calender-orange: #f68b26;
-  --calender-light-orange: #ffbe4a;
-  --calender-yellow: #fddc8a;
-  --calender-white: #fef2db;
+  --bg: #f0a500;
+  --brown-dark: #3d2b00;
+  --brown-mid: #7a5c00;
+  --card: #faf0dc;
+  --card-dark: #e8d5a3;
+  --white-soft: #fffdf5;
+  --brown-btn: #2c1a00;
 }
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body.register-page {
   min-height: 100vh;
-  background: linear-gradient(
-    to top,
-    var(--bg-orange) 0%,
-    var(--calender-light-orange) 100%
-  );
-  font-family: Georgia, serif;
+  font-family: "Courier New", Courier, monospace;
+  background: var(--bg);
+  color: var(--brown-dark);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.container {
+.register-container {
   width: 100%;
-  max-width: 650px;
-  padding: 40px 20px;
-  text-align: center;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.logo {
-  width: 240px;
-  margin-bottom: 25px;
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--brown-dark);
+  margin-bottom: 24px;
 }
 
-.input-box {
+.register-form {
   width: 100%;
-  padding: 18px;
-  margin-bottom: 15px;
-  border: 3px solid #8a6d2f;
-  border-radius: 14px;
-  background-color: var(--calender-white);
-  color: #8a6d2f;
-  font-size: 18px;
-  font-family: Georgia, serif;
+  display: flex;
+  flex-direction: column;
 }
 
-.input-box:focus {
+.input-field {
+  width: 100%;
+  padding: 16px 20px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 16px;
+  color: var(--brown-mid);
+  background-color: var(--card);
+  border: 2px solid var(--card-dark);
+  border-radius: 12px;
   outline: none;
-  border-color: var(--calender-dark-orange);
+  margin-bottom: 12px;
 }
 
-.button-line {
+.input-field::placeholder {
+  color: var(--brown-mid);
+  font-family: "Courier New", Courier, monospace;
+}
+
+.input-field:focus {
+  border-color: var(--brown-dark);
+}
+
+.actions {
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  margin-top: 8px;
 }
 
-.text-button {
+.btn {
   background: none;
   border: none;
-  color: #2b2108;
-  font-size: 20px;
-  font-family: Georgia, serif;
   cursor: pointer;
-}
-
-.text-button:hover {
-  text-decoration: underline;
-}
-
-#message {
-  min-height: 24px;
-  color: #5b451c;
+  font-family: "Courier New", Courier, monospace;
   font-size: 16px;
+  font-weight: 700;
+  color: var(--brown-dark);
+  padding: 4px 2px;
+}
+
+.btn:hover {
+  color: var(--brown-btn);
+}
+
+.message {
+  min-height: 22px;
+  margin-top: 12px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  text-align: center;
+  color: var(--brown-mid);
 }
