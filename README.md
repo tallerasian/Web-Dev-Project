@@ -8,6 +8,7 @@ Main goal is to make it easier for people to arrange a time or a day to meet up.
 
 ### Design 
 
+    Synced is designed to be easy to use and user friendly. You should be able to 
     TODO: Explain the design and use of the project here.
 
 # Collaborators
