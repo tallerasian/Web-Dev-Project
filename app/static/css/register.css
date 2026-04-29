@@ -1,77 +1,95 @@
 :root {
-  --bg: #f0a500;
-  --brown-dark: #3d2b00;
-  --brown-mid: #7a5c00;
-  --card: #faf0dc;
-  --card-dark: #e8d5a3;
-  --white-soft: #fffdf5;
-  --brown-btn: #2c1a00;
+  --bg-orange: #ffa309;
+  --bg-white: #fffef5;
+  --calender-dark-orange: #d8540e;
+  --calender-orange: #f68b26;
+  --calender-light-orange: #ffbe4a;
+  --calender-yellow: #fddc8a;
+  --calender-white: #fef2db;
+  --reg-black: #000000;
 }
 
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body.register-page {
   min-height: 100vh;
+  height: 100vh;
+  background: linear-gradient(
+    to top,
+    var(--bg-orange) 0%,
+    var(--calender-light-orange) 100%
+  );
   font-family: "Courier New", Courier, monospace;
-  background: var(--bg);
-  color: var(--brown-dark);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.register-container {
-  width: 100%;
-  max-width: 520px;
+.login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 900px;
 }
 
-.page-title {
-  font-size: 32px;
+.logo {
+  font-size: 2.4rem;
   font-weight: 700;
-  color: var(--brown-dark);
-  margin-bottom: 24px;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin-bottom: 28px;
+  font-family: "Courier New", Courier, monospace;
+  text-transform: lowercase;
 }
 
-.register-form {
+form {
   width: 100%;
+}
+
+.form-row {
   display: flex;
-  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .input-field {
   width: 100%;
+  flex: 1;
   padding: 16px 20px;
   font-family: "Courier New", Courier, monospace;
-  font-size: 16px;
-  color: var(--brown-mid);
-  background-color: var(--card);
-  border: 2px solid var(--card-dark);
+  font-size: 1rem;
+  color: #8a5a00;
+  background-color: var(--calender-white);
+  border: 2.5px solid var(--calender-orange);
   border-radius: 12px;
   outline: none;
-  margin-bottom: 12px;
+  transition: border-color 0.15s;
 }
 
 .input-field::placeholder {
-  color: var(--brown-mid);
+  color: var(--calender-orange);
   font-family: "Courier New", Courier, monospace;
 }
 
 .input-field:focus {
-  border-color: var(--brown-dark);
+  border-color: var(--calender-dark-orange);
 }
 
 .actions {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
+  align-items: center;
+  margin-top: 14px;
+  padding: 0 2px;
+}
+
+.center-action {
+  justify-content: center;
 }
 
 .btn {
@@ -79,21 +97,25 @@ body.register-page {
   border: none;
   cursor: pointer;
   font-family: "Courier New", Courier, monospace;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--brown-dark);
+  color: var(--calender-dark-orange);
+  letter-spacing: 0.02em;
   padding: 4px 2px;
+  transition: color 0.15s;
 }
 
 .btn:hover {
-  color: var(--brown-btn);
+  color: #ffffff;
 }
 
 .message {
-  min-height: 22px;
-  margin-top: 12px;
+  width: 100%;
+  min-height: 1.4em;
+  margin-top: 14px;
   font-family: "Courier New", Courier, monospace;
-  font-size: 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
   text-align: center;
-  color: var(--brown-mid);
+  color: #5a2e00;
 }
