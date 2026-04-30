@@ -1,0 +1,121 @@
+:root {
+  --bg-orange: #ffa309;
+  --bg-white: #fffef5;
+  --calender-dark-orange: #d8540e;
+  --calender-orange: #f68b26;
+  --calender-light-orange: #ffbe4a;
+  --calender-yellow: #fddc8a;
+  --calender-white: #fef2db;
+  --reg-black: #000000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.register-page {
+  min-height: 100vh;
+  height: 100vh;
+  background: linear-gradient(
+    to top,
+    var(--bg-orange) 0%,
+    var(--calender-light-orange) 100%
+  );
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 900px;
+}
+
+.logo {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin-bottom: 28px;
+  font-family: "Courier New", Courier, monospace;
+  text-transform: lowercase;
+}
+
+form {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.input-field {
+  width: 100%;
+  flex: 1;
+  padding: 16px 20px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1rem;
+  color: #8a5a00;
+  background-color: var(--calender-white);
+  border: 2.5px solid var(--calender-orange);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.input-field::placeholder {
+  color: var(--calender-orange);
+  font-family: "Courier New", Courier, monospace;
+}
+
+.input-field:focus {
+  border-color: var(--calender-dark-orange);
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding: 0 2px;
+}
+
+.center-action {
+  justify-content: center;
+}
+
+.btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--calender-dark-orange);
+  letter-spacing: 0.02em;
+  padding: 4px 2px;
+  transition: color 0.15s;
+}
+
+.btn:hover {
+  color: #ffffff;
+}
+
+.message {
+  width: 100%;
+  min-height: 1.4em;
+  margin-top: 14px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;
+  color: #5a2e00;
+}
