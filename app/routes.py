@@ -14,4 +14,6 @@ def home_page():
 def register_page():
     return render_template("register.html")
 
-
+@flask_app.route("/create_event")
+def create_event():
+    return render_template("create_event.html")
