@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Synced – {% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="../static/css/style.css">
+    </head>
+
+    {% include "snippets/logo.html.jinja" %}
+    {% block body %}
+        <body>
+            {% include "snippets/header.html.jinja" %}
+        </body>
+    {% endblock %}
+
+</html>

@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head> 
-        <link rel="stylesheet" href="../static/css/style.css">
-        <title>Synced - Create Event</title>
-    </head>
+{% extends "base.html.jinja" %}
+{% block title %}Create Event{% endblock %}
+{% block body %}
     <body>
-        <a class="back" href="home.html">Back</a>
+        {% include "snippets/header.html.jinja" %}
         <form>
             <h1>Create Event</h1>
 
@@ -19,7 +16,7 @@
             </div>
 
             <!-- steps -->
-             <div class="steps">
+                <div class="steps">
                 <fieldset class="step">
                     <h2>Choose the type of event</h2>
                     <!-- radio option determines which event type tab is visible -->
@@ -56,7 +53,7 @@
                     <h2>Invite event members</h2>
                     <p>Don't worry, we'll give you an invite code if you want to invite more people later.</p>
                 </fieldset>
-             </div>
+                </div>
 
             <!-- navigational buttons -->
             <div class="navigation">
@@ -68,4 +65,4 @@
         <!-- script placed at the end, when DOM is fully loaded -->
         <script src="../static/javascript/create_event.js"></script>
     </body>
-</html>
+{% endblock %}
