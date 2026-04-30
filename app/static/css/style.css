@@ -81,7 +81,7 @@ body {
    4. LOGIN PAGE  (login.html only)
    ================================================ */
 
-body.login-page {
+.login-page-body {
     display: flex;
     justify-content: center;
     align-items: center;

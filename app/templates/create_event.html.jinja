@@ -1,0 +1,65 @@
+{% extends "base.html.jinja" %}
+{% block title %}Create Event{% endblock %}
+{% block body %}
+    <form>
+        <h1>Create Event</h1>
+
+        <!-- show progress -->
+        <div class="progress">
+            <ol>
+                <li class="node">Details</li>
+                <li class="node">Availability</li>
+                <li class="node">Invite</li>
+            </ol>
+        </div>
+
+        <!-- steps -->
+            <div class="steps">
+            <fieldset class="step">
+                <h2>Choose the type of event</h2>
+                <!-- radio option determines which event type tab is visible -->
+                <div id="event-type">
+                    <input type="radio" name="event-type" value="day-event" id="day-event">
+                    <label for="day-event">Specific Day</label>
+                    <input type="radio" name="event-type" value="weekly-event" id="weekly-event">
+                    <label for="weekly-event">Weekly</label>
+                </div>
+
+                <div class="event-type-tab" id="day-event-tab">
+                    <p>Select a range of dates. Your group will decide on one of those dates</p>
+                </div>
+
+                <div class="event-type-tab" id="weekly-event-tab">
+                    <p>Select certain days of the week. Your group will decide on time ranges within those days</p>
+                </div>
+            </fieldset>
+
+            <fieldset class="step">
+                <h2>Select your availability</h2>
+                <div class="availability-tab" id="day-event-availability">
+                    <h3>Day Event</h3>
+                    <p>Click and drag to mark your availability. Click and drag selected regions to unselect them</p>
+                </div>
+
+                <div class="availability-tab" id="weekly-event-availability">
+                    <h3>Weekly Event</h3>
+                    <p>Click and drag to mark your availability. Click and drag selected regions to unselect them</p>
+                </div>
+            </fieldset>
+
+            <fieldset class="step">
+                <h2>Invite event members</h2>
+                <p>Don't worry, we'll give you an invite code if you want to invite more people later.</p>
+            </fieldset>
+            </div>
+
+        <!-- navigational buttons -->
+        <div class="navigation">
+            <button type="button" id="prev">Previous</button>
+            <button type="button" id="next">Next</button>
+            <button type="submit" id="submit">Create Event</button>
+        </div>
+    </form>
+    <!-- script placed at the end, when DOM is fully loaded -->
+    <script src="../static/javascript/create_event.js"></script>
+{% endblock %}
