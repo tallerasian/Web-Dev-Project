@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Synced – {% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="../static/css/style.css">
+    </head>
+</html>
+
+<svg width="0" height="0" style="position:absolute">
+    <defs>
+        <symbol id="synced-logo" viewBox="0 0 100 100">
+            <path d="M 30 20 Q 18 20 18 36 Q 18 52 50 52 Q 82 52 82 65 Q 82 80 70 80"
+                fill="none" stroke="#E07800" stroke-width="10" stroke-linecap="round"/>
+            <circle cx="30" cy="20" r="7" fill="#E07800"/>
+            <circle cx="70" cy="80" r="7" fill="#E07800"/>
+            <circle cx="50" cy="52" r="5" fill="#C06010"/>
+        </symbol>
+    </defs>
+</svg>
+
+<body>
+
+    <div class="home-topbar">
+        <div class="home-logo-row">
+            <svg width="32" height="32" class="logo-svg" viewBox="0 0 100 100"><use href="#synced-logo"/></svg>
+            <span class="home-wordmark">Synced</span>
+        </div>
+        <button class="icon-btn" title="Settings">⚙️</button>
+    </div>
+
+    {% block body %}{% endblock %}
+
+</body>
