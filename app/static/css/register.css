@@ -1,12 +1,9 @@
 :root {
   --bg-orange: #ffa309;
-  --bg-white: #fffef5;
   --calender-dark-orange: #d8540e;
   --calender-orange: #f68b26;
   --calender-light-orange: #ffbe4a;
-  --calender-yellow: #fddc8a;
   --calender-white: #fef2db;
-  --reg-black: #000000;
 }
 
 * {
@@ -42,8 +39,6 @@ body.register-page {
   color: #fff;
   letter-spacing: -0.5px;
   margin-bottom: 28px;
-  font-family: "Courier New", Courier, monospace;
-  
 }
 
 form {
@@ -72,7 +67,6 @@ form {
 
 .input-field::placeholder {
   color: var(--calender-orange);
-  font-family: "Courier New", Courier, monospace;
 }
 
 .input-field:focus {
@@ -82,14 +76,10 @@ form {
 .actions {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 14px;
-  padding: 0 2px;
-}
-
-.center-action {
   justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+  padding: 0 2px;
 }
 
 .btn {
