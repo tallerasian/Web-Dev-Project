@@ -1,8 +1,7 @@
 {% extends "base.html.jinja" %}
 {% block title %}Login{% endblock %}
-{% block header %}{% endblock %}
 {% block body %}
-    <div class="login-page-body">
+    <body class="login-page">
         <div class="login-container">
             <div class="logo">
                 <!-- And here for displaying the logo -->
@@ -23,7 +22,6 @@
             <p id="message" class="message"></p>
             <a id="joinBtn" class="join-link" href="#">Have a code? Join an event →</a>
         </div>
-    </div>
-
-    <script src="../static/javascript/login.js"></script>
+        <script src="../static/javascript/login.js"></script>
+    </body>
 {% endblock %}

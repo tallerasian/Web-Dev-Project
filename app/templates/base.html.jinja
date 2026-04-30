@@ -6,22 +6,12 @@
         <title>Synced – {% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="../static/css/style.css">
     </head>
-</html>
 
-{% include "logo.html.jinja" %}
-
-<body>
-
-    {% block header %}
-    <div class="home-topbar">
-        <div class="home-logo-row">
-            <svg width="32" height="32" class="logo-svg" viewBox="0 0 100 100"><use href="#synced-logo"/></svg>
-            <span class="home-wordmark">Synced</span>
-        </div>
-        <button class="icon-btn" title="Settings">⚙️</button>
-    </div>
+    {% include "snippets/logo.html.jinja" %}
+    {% block body %}
+        <body>
+            {% include "snippets/header.html.jinja" %}
+        </body>
     {% endblock %}
 
-    {% block body %}{% endblock %}
-
-</body>
+</html>
