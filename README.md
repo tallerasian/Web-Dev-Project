@@ -52,6 +52,10 @@ In order to launch the application, a virtual environment with the necessary mod
 
 The app can then be accessed from http://localhost:5000
 
+>Stop running local host
+
+    Press [CTRL + C] to quit
+
 # Testing the Application
 
     TODO: Instructions to test the project here.
