@@ -20,7 +20,7 @@ def create_event():
 
 @flask_app.route("/heatmap_days")
 def heatmap_days():
-    return render_template("heatmap_days.html")
+    return render_template("heatmap_days.html.jinja")
 
 @flask_app.route("/heatmap_times")
 def heatmap_times():
