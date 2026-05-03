@@ -24,4 +24,4 @@ def heatmap_days():
 
 @flask_app.route("/heatmap_times")
 def heatmap_times():
-    return render_template("heatmap_times.html")
+    return render_template("heatmap_times.html.jinja")
