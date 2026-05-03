@@ -22,6 +22,6 @@
             <p id="message" class="message"></p>
             <a id="joinBtn" class="join-link" href="#">Have a code? Join an event →</a>
         </div>
-        <script src="../static/javascript/login.js"></script>
+        <script src="{{ url_for('static', filename='javascript/login.js') }}"></script>
     </body>
 {% endblock %}
