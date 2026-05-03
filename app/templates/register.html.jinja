@@ -1,14 +1,9 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Register</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/register.css') }}"
-    />
-  </head>
+{% extends "base.html.jinja" %}
+{% block title %}Register{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+{% block body %}
   <body class="register-page">
     <div class="login-container">
       <div class="logo">Register</div>
@@ -69,4 +64,4 @@
 
     <script src="{{ url_for('static', filename='javascript/register.js') }}"></script>
   </body>
-</html>
+{% endblock %}

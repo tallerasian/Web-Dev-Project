@@ -12,7 +12,7 @@ def home_page():
 
 @flask_app.route("/register")
 def register_page():
-    return render_template("register.html")
+    return render_template("register.html.jinja")
 
 @flask_app.route("/create_event")
 def create_event():
