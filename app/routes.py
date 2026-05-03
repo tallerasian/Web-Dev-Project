@@ -17,3 +17,11 @@ def register_page():
 @flask_app.route("/create_event")
 def create_event():
     return render_template("create_event.html.jinja")
+
+@flask_app.route("/heatmap_days")
+def heatmap_days():
+    return render_template("heatmap_days.html")
+
+@flask_app.route("/heatmap_times")
+def heatmap_times():
+    return render_template("heatmap_times.html")
