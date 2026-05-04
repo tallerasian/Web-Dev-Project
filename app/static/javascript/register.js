@@ -31,5 +31,6 @@ registerForm.addEventListener("submit", function (event) {
   } else {
     event.preventDefault();
     message.textContent = "Registration successful.";
+    window.location.href = "/login";
   }
 });

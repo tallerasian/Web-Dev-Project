@@ -9,6 +9,6 @@ def home_page():
 def register():
     return render_template("register.html")
 
-@flask_app.route("/")
+@flask_app.route("/login")
 def login_page():
     return render_template("login.html")    
