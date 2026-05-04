@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Heatmap – Days</title>
-  <link rel="stylesheet" href="../static/css/heatmap.css">
-</head>
-<body>
+{% extends "base.html.jinja" %}
+{% block title %}Heatmap – Days{% endblock %}
+{% block body_class %}heatmap-days-page{% endblock %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/heatmap.css') }}">
+{% endblock %}
+
+{% block body %}
   <div class="header">
     <h1 class="header-title">Create Event</h1>
     <div class="steps">
@@ -17,7 +16,7 @@
       </div>
       <div class="step-line done"></div>
       <div class="step">
-        <div class="step-circle">✓</div>
+        <div class="step-circle">2</div>
         <span class="step-label">Availability</span>
       </div>
       <div class="step-line"></div>
@@ -26,7 +25,7 @@
         <span class="step-label">Invite</span>
       </div>
     </div>
-    <div class="event-label">📅 My Event</div>
+    <div class="event-label">📅 {{ event.name }}</div>
   </div>
 
   <div class="content">
@@ -34,15 +33,13 @@
       <div id="calendar"></div>
     </div>
     <aside class="side-panels">
+      <div class="side-panel">
+        <button class="copy-btn" onclick="window.location.href='{{ url_for('event_code') }}'">Next: Invite →</button>
+      </div>
       <div class="side-panel" id="popular-panel">
         <p class="side-panel-label">most popular</p>
         <p id="popular-value" class="side-panel-value">—</p>
         <p id="popular-count" class="side-panel-sub"></p>
-      </div>
-      <div class="side-panel" id="share-panel">
-        <p class="side-panel-label">share code</p>
-        <p id="share-code" class="share-code"></p>
-        <button class="copy-btn" onclick="copyCode()">copy</button>
       </div>
       <div class="side-panel hover-panel" id="hover-panel">
         <p class="side-panel-label">available</p>
@@ -51,7 +48,8 @@
       </div>
     </aside>
   </div>
+{% endblock %}
 
-  <script src="../static/javascript/heatmap_days.js"></script>
-</body>
-</html>
+{% block scripts %}
+  <script src="{{ url_for('static', filename='javascript/heatmap_days.js') }}"></script>
+{% endblock %}

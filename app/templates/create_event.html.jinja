@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Event</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body class="create-event-page">
+{% extends "base.html.jinja" %}
+{% block title %}Create Event{% endblock %}
+{% block body_class %}create-event-page{% endblock %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block body %}
   <div class="create-wrap">
 
     <!-- HEADER (matching heatmap style) -->
@@ -17,12 +16,12 @@
       <!-- STEP INDICATOR  -->
       <div class="steps">
         <div class="step">
-          <div class="step-circle">✓</div>
+          <div class="step-circle">1</div>
           <span class="step-label">Details</span>
         </div>
-        <div class="step-line done"></div>
+        <div class="step-line"></div>
         <div class="step">
-          <div class="step-circle">2</div>
+          <div class="step-circle pending">2</div>
           <span class="step-label">Availability</span>
         </div>
         <div class="step-line"></div>
@@ -134,7 +133,8 @@
     </div>
 
   </div><!-- /create-wrap -->
+{% endblock %}
 
+{% block scripts %}
   <script src="{{ url_for('static', filename='javascript/create_event.js') }}"></script>
-</body>
-</html>
+{% endblock %}

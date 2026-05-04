@@ -182,7 +182,7 @@ function handleNext() {
       from:     rangeFrom,
       to:       rangeTo || rangeFrom
     });
-    window.location.href = `/heatmap_days?${params.toString()}`;
+    window.location.href = `/event/heatmap_days?${params.toString()}`;
 
   } else {
     if (selectedDays.size === 0) {
@@ -199,7 +199,7 @@ function handleNext() {
       timeFrom: timeFrom,
       timeTo:   timeTo
     });
-    window.location.href = `/heatmap_times?${params.toString()}`;
+    window.location.href = `/event/heatmap_times?${params.toString()}`;
   }
 }
 
