@@ -1,0 +1,46 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}Register{% endblock %}
+
+{% block body_class %}register-page{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="logo">Register</div>
+
+    <form id="registerForm">
+        <div class="form-row">
+            <input type="text" id="firstName" class="input-field" placeholder="First Name:" />
+            <input type="text" id="lastName" class="input-field" placeholder="Last Name:" />
+        </div>
+
+        <div class="form-row">
+            <input type="email" id="email" class="input-field" placeholder="Email:" />
+            <input type="text" id="username" class="input-field" placeholder="Username:" />
+        </div>
+
+        <div class="form-row">
+            <input type="password" id="password" class="input-field" placeholder="Password:" />
+            <input type="password" id="confirmPassword" class="input-field" placeholder="Confirm Password:" />
+        </div>
+
+        <div class="actions center-action">
+            <button type="submit" class="btn">Register</button>
+        </div>
+
+        {% if error %}
+            <p class="message error">{{ error }}</p>
+        {% endif %}
+
+        <p id="message" class="message"></p>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='javascript/register.js') }}"></script>
+{% endblock %}
