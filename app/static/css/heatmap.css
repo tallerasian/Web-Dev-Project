@@ -1,5 +1,6 @@
 :root {
   --bg:          #F0A500;
+  --bg-orange:   #ffa309;
   --brown-dark:  #3D2B00;
   --brown-mid:   #7A5C00;
   --card:        #FAF0DC;
@@ -27,7 +28,7 @@
 
 body {
   font-family: var(--font);
-  background: var(--bg);
+  background: var(--bg-orange);
   color: var(--brown-dark);
   min-height: 100vh;
 }
