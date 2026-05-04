@@ -1,0 +1,78 @@
+{% extends "base.html.jinja" %}
+{% block title %}Home{% endblock %}
+{% block body_class %}home-page{% endblock %}
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+{% block body %}
+<div class="home-page-wrap">
+    {% include "snippets/header.html.jinja" %}
+
+        <!-- NAV TABS -->
+        <div class="home-nav-tabs">
+            <button class="nav-tab active" onclick="switchTab(this, 'tab-events')">My Events</button>
+            <button class="nav-tab" onclick="switchTab(this, 'tab-calendar')">My Calendar</button>
+            <button class="nav-tab" onclick="switchTab(this, 'tab-join')">Join Event</button>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="home-content">
+
+            <!-- MY EVENTS TAB -->
+            <div id="tab-events" class="tab-content active">
+                <div class="events-panel">
+                    <div class="panel-title">Upcoming Events</div>
+                    {% if events %}
+                        {% for event in events %}
+                        <div class="event-card">
+                            <div>
+                                <div class="event-card-name">{{ event.name }}</div>
+                                <div class="event-card-sub">{{ event.type }} · {{ event.respondent_count }} respondents · {% if event.best_time %}Best: {{ event.best_time }}{% else %}Waiting...{% endif %}</div>
+                            </div>
+                            <span class="event-card-badge {% if event.status == 'PENDING' %}pending{% endif %}">{{ event.status }}</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-events">You have no upcoming events. Create one below!</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- MY CALENDAR TAB -->
+            <div id="tab-calendar" class="tab-content">
+                <div class="mini-calendar">
+                    <div class="cal-nav">
+                        <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
+                        <span class="cal-month" id="cal-month-label"></span>
+                        <button class="cal-nav-btn" onclick="calNav(1)">›</button>
+                    </div>
+                    <div class="cal-grid" id="cal-grid"></div>
+                </div>
+            </div>
+
+            <!-- JOIN EVENT TAB -->
+            <div id="tab-join" class="tab-content">
+                <div class="events-panel">
+                    <div class="panel-title">Join an Event</div>
+                    <p class="join-instructions">Enter the 6-character code shared by your event organiser.</p>
+                    <input id="join-code-input" class="input-field join-code-field" maxlength="6" placeholder="ABC123" autocomplete="off" spellcheck="false" />
+                    <div class="join-feedback" id="join-feedback"></div>
+                    <button class="btn-primary" onclick="submitJoinCode()">Join Event</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM ACTIONS -->
+        <div class="bottom-actions">
+            <button class="btn-primary" onclick="window.location.href='{{ url_for('create_event') }}'">Create New Event +</button>
+        </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='javascript/home.js') }}"></script>
+{% endblock %}
