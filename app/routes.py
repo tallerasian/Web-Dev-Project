@@ -5,7 +5,6 @@ import string
 
 
 @flask_app.route("/")
-<<<<<<< HEAD
 def home_page():
     return render_template("home.html")
 
