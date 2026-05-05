@@ -1,0 +1,41 @@
+{% extends "base.html.jinja" %}
+{% block title %}Event Code{% endblock %}
+{% block body_class %}code-page{% endblock %}
+
+{% block body %}
+  <div class="header">
+    <h1 class="header-title">Create Event</h1>
+    <div class="steps">
+      <div class="step">
+        <div class="step-circle">✓</div>
+        <span class="step-label">Details</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step">
+        <div class="step-circle">✓</div>
+        <span class="step-label">Availability</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step">
+        <div class="step-circle">3</div>
+        <span class="step-label">Invite</span>
+      </div>
+    </div>
+    <div class="event-label">📅 {{ event.name }}</div>
+  </div>
+
+  <div class="create-wrap">
+    <div class="share-panel-wrap">
+      <div class="time-range-card">
+        <p class="time-range-label">YOUR EVENT CODE</p>
+        <p class="share-code-large">{{ event.code }}</p>
+        <p class="share-instructions">Share this code with your group so they can submit their availability.</p>
+        <button class="btn-primary" onclick="navigator.clipboard.writeText('{{ event.code }}')">Copy Code</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='javascript/code.js') }}"></script>
+{% endblock %}

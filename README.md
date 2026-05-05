@@ -21,7 +21,40 @@ Main goal is to make it easier for people to arrange a time or a day to meet up.
 
 # Launching the Application
 
-    TODO: Instructions to launch the project here.
+## 1. Setting up the Python virtual environment
+
+In order to launch the application, a virtual environment with the necessary modules must be activated.
+
+>Create directory for virtual environment.
+    
+    python3 -m venv .venv
+
+>Activate the virtual environment.
+
+>for MacOS/Linux:
+    
+    source .venv/bin/activate
+
+>for Windows:
+    
+    .venv\Scripts\activate
+
+>Install dependencies.
+
+    pip install -r requirements.txt
+
+
+## 2. Starting the Flask application
+
+>Run application in dev environment.
+
+    flask --app app run
+
+The app can then be accessed from http://localhost:5000
+
+>Stop running local host
+
+    Press [CTRL + C] to quit
 
 # Testing the Application
 

@@ -1,0 +1,140 @@
+{% extends "base.html.jinja" %}
+{% block title %}Create Event{% endblock %}
+{% block body_class %}create-event-page{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block body %}
+  <div class="create-wrap">
+
+    <!-- HEADER (matching heatmap style) -->
+    <div class="header">
+      <h1 class="header-title">Create Event</h1>
+
+      <!-- STEP INDICATOR  -->
+      <div class="steps">
+        <div class="step">
+          <div class="step-circle">1</div>
+          <span class="step-label">Details</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle pending">2</div>
+          <span class="step-label">Availability</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle pending">3</div>
+          <span class="step-label">Invite</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TYPE TOGGLE — always visible -->
+    <div class="type-tabs">
+      <button class="type-tab" id="tab-days" onclick="selectType('days')">Specific Days</button>
+      <button class="type-tab" id="tab-week" onclick="selectType('week')">Days of the Week</button>
+    </div>
+
+    <!-- DESCRIPTIONS -->
+    <div class="type-descriptions">
+      <p class="type-desc hidden" id="desc-days">• Find a day that works for your group within a certain date range</p>
+      <p class="type-desc hidden" id="desc-week">• Find a recurring day and time that works for your group!</p>
+    </div>
+
+    <!-- MAIN FORM AREA — hidden until type selected -->
+    <div class="form-layout hidden" id="form-layout">
+
+      <!-- LEFT COLUMN -->
+      <div class="form-left">
+
+        <!-- SPECIFIC DAYS: Calendar + Date Range (no time range) -->
+        <div id="panel-days" class="hidden">
+          <p class="section-label">SELECT DATE RANGE</p>
+          <div class="date-range-row">
+            <div class="date-input-wrap">
+              <label class="input-sublabel">From</label>
+              <input type="date" class="input-field date-field" id="date-from">
+            </div>
+            <span class="date-sep">→</span>
+            <div class="date-input-wrap">
+              <label class="input-sublabel">To</label>
+              <input type="date" class="input-field date-field" id="date-to">
+            </div>
+          </div>
+
+          <!-- Mini month calendar -->
+          <div class="mini-cal-card" id="mini-cal-card">
+            <div class="mini-cal-nav">
+              <button class="cal-nav-btn" onclick="changeCalMonth(-1)">&#8249;</button>
+              <span class="cal-month" id="cal-month-label"></span>
+              <button class="cal-nav-btn" onclick="changeCalMonth(1)">&#8250;</button>
+            </div>
+            <div class="cal-grid" id="mini-cal-grid"></div>
+          </div>
+        </div>
+
+        <!-- DAYS OF THE WEEK: Day selector + Time range -->
+        <div id="panel-week" class="hidden">
+          <p class="section-label">SELECT DAYS</p>
+          <div class="week-day-grid">
+            <div class="week-day-header">M</div>
+            <div class="week-day-header">T</div>
+            <div class="week-day-header">W</div>
+            <div class="week-day-header">T</div>
+            <div class="week-day-header">F</div>
+            <div class="week-day-header">S</div>
+            <div class="week-day-header">S</div>
+            <div class="week-day-cell" data-day="0" onclick="toggleWeekDay(this)"></div>
+            <div class="week-day-cell" data-day="1" onclick="toggleWeekDay(this)"></div>
+            <div class="week-day-cell" data-day="2" onclick="toggleWeekDay(this)"></div>
+            <div class="week-day-cell" data-day="3" onclick="toggleWeekDay(this)"></div>
+            <div class="week-day-cell" data-day="4" onclick="toggleWeekDay(this)"></div>
+            <div class="week-day-cell" data-day="5" onclick="toggleWeekDay(this)"></div>
+            <div class="week-day-cell" data-day="6" onclick="toggleWeekDay(this)"></div>
+          </div>
+
+          <!-- TIME RANGE: only shown for Days of Week -->
+          <div class="time-range-card" style="margin-top: 16px;">
+            <p class="time-range-label">TIME RANGE</p>
+            <div class="time-range-row">
+              <input type="time" class="input-field time-field" id="time-from" value="09:00">
+              <span class="date-sep">to</span>
+              <input type="time" class="input-field time-field" id="time-to" value="17:00">
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /form-left -->
+
+      <!-- RIGHT COLUMN: Event details -->
+      <div class="form-right">
+        <div class="details-group">
+          <label class="section-label">EVENT NAME</label>
+          <input type="text" class="input-field" id="event-name" placeholder="What's the event?">
+        </div>
+        <div class="details-group">
+          <label class="section-label">LOCATION</label>
+          <input type="text" class="input-field" id="event-location" placeholder="Enter location...">
+        </div>
+        <div class="details-group">
+          <label class="section-label">DETAILS</label>
+          <textarea class="input-field textarea-field" id="event-details" placeholder="Add any extra details..."></textarea>
+        </div>
+      </div>
+
+    </div><!-- /form-layout -->
+
+    <!-- NEXT BUTTON — hidden until type selected -->
+    <div class="next-wrap hidden" id="next-wrap">
+      <button class="btn-primary" onclick="handleNext()">Next: Invite →</button>
+    </div>
+
+  </div><!-- /create-wrap -->
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='javascript/create_event.js') }}"></script>
+{% endblock %}
