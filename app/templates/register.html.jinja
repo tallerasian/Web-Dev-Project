@@ -12,20 +12,21 @@
 <div class="login-container">
     <div class="logo">Register</div>
 
-    <form id="registerForm">
+    <form id="registerForm" action="/register" method="POST">
+        {{ form.hidden_tag() }}
         <div class="form-row">
-            <input type="text" id="firstName" class="input-field" placeholder="First Name:" />
-            <input type="text" id="lastName" class="input-field" placeholder="Last Name:" />
+            <input type="text" id="firstName" name="first_name" class="input-field" placeholder="First Name:" />
+            <input type="text" id="lastName" name="last_name" class="input-field" placeholder="Last Name:" />
         </div>
 
         <div class="form-row">
-            <input type="email" id="email" class="input-field" placeholder="Email:" />
-            <input type="text" id="username" class="input-field" placeholder="Username:" />
+            <input type="email" id="email" name="email" class="input-field" placeholder="Email:" />
+            <input type="text" id="username" name="username" class="input-field" placeholder="Username:" />
         </div>
 
         <div class="form-row">
-            <input type="password" id="password" class="input-field" placeholder="Password:" />
-            <input type="password" id="confirmPassword" class="input-field" placeholder="Confirm Password:" />
+            <input type="password" id="password" name="password" class="input-field" placeholder="Password:" />
+            <input type="password" id="confirmPassword" name="confirm_password" class="input-field" placeholder="Confirm Password:" />
         </div>
 
         <div class="actions center-action">

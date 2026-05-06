@@ -229,8 +229,8 @@ body.home-page {
     letter-spacing: 0.02em;
 }
 
-.icon-btn {
-    background: #e8e0d0;
+.logout-btn {
+    background: #c0392b;
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -238,12 +238,14 @@ body.home-page {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    color: #fff;
     cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
 }
 
-.icon-btn:hover {
-    background: var(--calender-white);
+.logout-btn:hover {
+    background: #96281b;
 }
 
 .home-nav-tabs {

@@ -8,9 +8,10 @@
         <svg width="36" height="36" viewBox="0 0 100 100"><use href="#synced-logo"/></svg> ynced
     </div>
 
-    <form id="loginForm">
-        <input id="username" class="input-field" type="text" placeholder="Username:" />
-        <input id="password" class="input-field" type="password" placeholder="Password:" />
+    <form id="loginForm" action="/login" method="POST">
+        {{ form.hidden_tag() }}
+        <input id="username" name="username" class="input-field" type="text" placeholder="Username:" />
+        <input id="password" name="password" class="input-field" type="password" placeholder="Password:" />
 
         <div class="actions">
             <a href="/register" id="registerBtn" class="btn">Register</a>

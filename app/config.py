@@ -9,3 +9,4 @@ class Config:
         "sqlite:///" + os.path.join(BASE_DIR, "..", "app.db")
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    WTF_CSRF_ENABLED = True

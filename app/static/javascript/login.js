@@ -4,11 +4,8 @@ var password = document.getElementById("password");
 var message = document.getElementById("message");
 
 form.addEventListener("submit", function(event) {
-    event.preventDefault();
-
     if (username.value.trim() === "" || password.value.trim() === "") {
+        event.preventDefault();
         message.innerHTML = "Please fill in both fields.";
-    } else {
-        message.innerHTML = "Sign in button clicked.";
     }
 });
