@@ -2,7 +2,7 @@
 {% block title %}Login{% endblock %}
 {% block body_class %}login-page{% endblock %}
 {% block extra_head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -11,21 +11,23 @@
         <svg width="36" height="36" viewBox="0 0 100 100"><use href="#synced-logo"/></svg> ynced
     </div>
 
-    <input id="username" class="input-field" type="text" placeholder="Username:" />
-    <input id="password" class="input-field" type="password" placeholder="Password:" />
+    <form id="loginForm">
+        <input id="username" class="input-field" type="text" placeholder="Username:" />
+        <input id="password" class="input-field" type="password" placeholder="Password:" />
 
-    <div class="actions">
-        <a href="/register" id="registerBtn" class="btn">Register</a>
-        <button id="signinBtn" class="btn">Sign in</button>
-    </div>
+        <div class="actions">
+            <a href="/register" id="registerBtn" class="btn">Register</a>
+            <button type="submit" id="signinBtn" class="btn">Sign in</button>
+        </div>
 
-    {% if error %}
-        <p class="message error">{{ error }}</p>
-    {% endif %}
+        {% if error %}
+            <p class="message error">{{ error }}</p>
+        {% endif %}
 
-    <p id="message" class="message"></p>
+        <p id="message" class="message"></p>
 
-    <a id="joinBtn" class="join-link" href="#">Have a code? Join an event →</a>
+        <a id="joinBtn" class="join-link" href="#">Have a code? Join an event →</a>
+    </form>
 </div>
 {% endblock %}
 

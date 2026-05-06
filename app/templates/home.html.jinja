@@ -2,10 +2,6 @@
 {% block title %}Home{% endblock %}
 {% block body_class %}home-page{% endblock %}
 
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-
 {% block body %}
 <div class="home-page-wrap">
     {% include "snippets/header.html.jinja" %}
@@ -66,8 +62,9 @@
         </div>
 
         <!-- BOTTOM ACTIONS -->
+        {% set create_event_url = url_for('create_event') %}
         <div class="bottom-actions">
-            <button class="btn-primary" onclick="window.location.href='{{ url_for('create_event') }}'">Create New Event +</button>
+            <button class="btn-primary" onclick="window.location.href='{{ create_event_url }}'">Create New Event +</button>
         </div>
 
 </div>
