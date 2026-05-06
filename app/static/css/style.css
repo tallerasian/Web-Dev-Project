@@ -137,6 +137,7 @@ body.login-page {
     letter-spacing: 0.02em;
     padding: 4px 2px;
     transition: color 0.15s;
+    text-decoration: none;
 }
 
 .btn:hover {
