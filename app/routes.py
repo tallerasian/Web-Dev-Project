@@ -42,8 +42,7 @@ def register_page():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        login_user(user)
-        return redirect(url_for("home_page"))
+        return redirect(url_for("login_page"))
     return render_template("register.html.jinja", form=form)
 
 
