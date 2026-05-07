@@ -1,7 +1,7 @@
 from app import flask_app, db
 from app.models import User
 from app.forms import LoginForm, RegisterForm
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user
 import random
 import string
@@ -68,13 +68,26 @@ def create_event():
 @flask_app.route("/event/heatmap_times")
 @login_required
 def heatmap_times():
-    return render_template("heatmap_times.html.jinja", event={"name": "My Event", "code": "ABC123"})
+    return render_template("heatmap_times.html.jinja", event={
+        "name":      request.args.get("name", "My Event"),
+        "days":      request.args.get("days", "0,1,2,3,4,5,6"),
+        "time_from": request.args.get("timeFrom", "09:00"),
+        "time_to":   request.args.get("timeTo", "17:00"),
+        "location":  request.args.get("location", ""),
+        "details":   request.args.get("details", ""),
+    })
 
 
 @flask_app.route("/event/heatmap_days")
 @login_required
 def heatmap_days():
-    return render_template("heatmap_days.html.jinja", event={"name": "My Event", "code": "ABC123"})
+    return render_template("heatmap_days.html.jinja", event={
+        "name":     request.args.get("name", "My Event"),
+        "from":     request.args.get("from", ""),
+        "to":       request.args.get("to", ""),
+        "location": request.args.get("location", ""),
+        "details":  request.args.get("details", ""),
+    })
 
 
 def generate_event_code():

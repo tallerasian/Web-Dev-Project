@@ -6,25 +6,26 @@ const MONTH_NAMES = [
 const DAY_NAMES = ['Su','Mo','Tu','We','Th','Fr','Sa'];
 
 const today = new Date();
-const later = new Date(today);
-later.setDate(later.getDate() + 30);
 
-let range = {
-  from: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
-  to:   new Date(later.getFullYear(), later.getMonth(), later.getDate())
-};
+function parseDateLocal(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
 
-let viewYear  = today.getFullYear();
-let viewMonth = today.getMonth();
+const rangeFrom = EVENT_DATE_FROM ? parseDateLocal(EVENT_DATE_FROM) : today;
+const rangeTo   = EVENT_DATE_TO   ? parseDateLocal(EVENT_DATE_TO)   : (() => {
+  const d = new Date(today); d.setDate(d.getDate() + 30); return d;
+})();
+
+let range = { from: rangeFrom, to: rangeTo };
+
+let viewYear  = range.from.getFullYear();
+let viewMonth = range.from.getMonth();
 
 const groupData  = {};
 const myData     = {};
 const peopleData = {}; // key -> string[]
 
-// Fake participant names for demo
-const FAKE_NAMES = ['Alice','Ben','Clara','Diego','Eva','Felix','Grace','Hugo','Isla','Jake'];
-
-// For demo: seed some random data for the whole range
 function dateKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }
@@ -38,24 +39,6 @@ function isInRange(y, m, d) {
   return dt >= range.from && dt <= range.to;
 }
 
-function seedGroupData() {
-  const cur = new Date(range.from);
-  while (cur <= range.to) {
-    const k   = fmtDate(cur);
-    const dow = cur.getDay();
-    const mid     = cur.getDate() >= 8 && cur.getDate() <= 22;
-    const weekend = dow === 0 || dow === 6;
-    if (groupData[k] === undefined) {
-      let count;
-      if (!weekend && mid)  count = Math.floor(Math.random() * 3) + 2;
-      else if (!weekend)    count = Math.floor(Math.random() * 2) + 1;
-      else                  count = Math.random() < 0.3 ? 1 : 0;
-      groupData[k]  = count;
-      peopleData[k] = FAKE_NAMES.slice().sort(() => 0.5 - Math.random()).slice(0, count);
-    }
-    cur.setDate(cur.getDate() + 1);
-  }
-}
 
 function changeMonth(dir) {
   viewMonth += dir;
@@ -189,7 +172,6 @@ function updatePopular() {
 
 // 
 document.addEventListener('DOMContentLoaded', () => {
-  seedGroupData();
   render();
   updatePopular();
   initShareCode();

@@ -51,5 +51,11 @@
 {% endblock %}
 
 {% block scripts %}
+  <script>
+    const EVENT_NAME      = {{ event.name      | tojson }};
+    const EVENT_DAYS      = {{ event.days      | tojson }};
+    const EVENT_TIME_FROM = {{ event.time_from | tojson }};
+    const EVENT_TIME_TO   = {{ event.time_to   | tojson }};
+  </script>
   <script src="{{ url_for('static', filename='javascript/heatmap_times.js') }}"></script>
 {% endblock %}
