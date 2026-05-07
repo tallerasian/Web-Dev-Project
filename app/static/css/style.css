@@ -320,6 +320,11 @@ body.home-page {
     border: 1px solid rgba(200, 160, 80, 0.15);
 }
 
+.event-card-link {
+    text-decoration: none;
+    display: block;
+}
+
 .event-card:last-child {
     margin-bottom: 0;
 }

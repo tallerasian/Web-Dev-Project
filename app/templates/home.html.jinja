@@ -22,13 +22,18 @@
                     <div class="panel-title">Upcoming Events</div>
                     {% if events %}
                         {% for event in events %}
-                        <div class="event-card">
-                            <div>
-                                <div class="event-card-name">{{ event.name }}</div>
-                                <div class="event-card-sub">{{ event.type }} · {{ event.respondent_count }} respondents · {% if event.best_time %}Best: {{ event.best_time }}{% else %}Waiting...{% endif %}</div>
+                        <!-- clicking the card takes you straight to the heatmap -->
+                        <a href="/event/{{ event.id }}/heatmap" class="event-card-link">
+                            <div class="event-card">
+                                <div>
+                                    <div class="event-card-name">{{ event.name }}</div>
+                                    <div class="event-card-sub">
+                                        {{ event.event_type }} · {{ event.members|length }} respondents · Waiting...
+                                    </div>
+                                </div>
+                                <span class="event-card-badge pending">PENDING</span>
                             </div>
-                            <span class="event-card-badge {% if event.status == 'PENDING' %}pending{% endif %}">{{ event.status }}</span>
-                        </div>
+                        </a>
                         {% endfor %}
                     {% else %}
                         <p class="no-events">You have no upcoming events. Create one below!</p>
@@ -53,9 +58,17 @@
                 <div class="events-panel">
                     <div class="panel-title">Join an Event</div>
                     <p class="join-instructions">Enter the 6-character code shared by your event organiser.</p>
-                    <input id="join-code-input" class="input-field join-code-field" maxlength="6" placeholder="ABC123" autocomplete="off" spellcheck="false" />
-                    <div class="join-feedback" id="join-feedback"></div>
-                    <button class="btn-primary" onclick="submitJoinCode()">Join Event</button>
+
+                    <!-- real form — POSTs to /event/join server-side -->
+                    <form method="POST" action="/event/join">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input id="join-code-input" name="code" class="input-field join-code-field"
+                               maxlength="6" placeholder="ABC123" autocomplete="off" spellcheck="false" />
+                        {% if join_error %}
+                            <div class="join-feedback error">{{ join_error }}</div>
+                        {% endif %}
+                        <button type="submit" class="btn-primary">Join Event</button>
+                    </form>
                 </div>
             </div>
 
