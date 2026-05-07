@@ -34,7 +34,7 @@
     </div>
     <aside class="side-panels">
       <div class="side-panel">
-        <button class="copy-btn" onclick="window.location.href='{{ url_for('event_code') }}'">Next: Invite →</button>
+        <button class="copy-btn" onclick="goToInvite()">Next: Invite →</button>
       </div>
       <div class="side-panel" id="popular-panel">
         <p class="side-panel-label">most popular</p>
@@ -55,6 +55,16 @@
     const EVENT_NAME      = {{ event.name | tojson }};
     const EVENT_DATE_FROM = {{ event.from | tojson }};
     const EVENT_DATE_TO   = {{ event.to   | tojson }};
+
+    function goToInvite() {
+      const params = new URLSearchParams({
+        name: EVENT_NAME,
+        type: 'days',
+        from: EVENT_DATE_FROM,
+        to:   EVENT_DATE_TO
+      });
+      window.location.href = '/event/code?' + params.toString();
+    }
   </script>
   <script src="{{ url_for('static', filename='javascript/heatmap_days.js') }}"></script>
 {% endblock %}

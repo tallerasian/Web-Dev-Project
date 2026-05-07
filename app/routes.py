@@ -1,7 +1,7 @@
 from app import flask_app, db
 from app.models import User
 from app.forms import LoginForm, RegisterForm
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, session
 from flask_login import login_required, login_user, logout_user
 import random
 import string
@@ -56,7 +56,8 @@ def logout():
 @flask_app.route("/home")
 @login_required
 def home_page():
-    return render_template("home.html.jinja")
+    events = session.get("events", [])
+    return render_template("home.html.jinja", events=events)
 
 
 @flask_app.route("/event")
@@ -97,5 +98,19 @@ def generate_event_code():
 @flask_app.route("/event/code")
 @login_required
 def event_code():
-    code = generate_event_code()
-    return render_template("code.html.jinja", event={"name": "My Event", "code": code})
+    code       = generate_event_code()
+    name       = request.args.get("name", "My Event")
+    event_type = request.args.get("type", "days")
+
+    events = session.get("events", [])
+    events.append({
+        "code":             code,
+        "name":             name,
+        "type":             event_type,
+        "status":           "PENDING",
+        "respondent_count": 0,
+        "best_time":        None,
+    })
+    session["events"] = events
+
+    return render_template("code.html.jinja", event={"name": name, "code": code})
