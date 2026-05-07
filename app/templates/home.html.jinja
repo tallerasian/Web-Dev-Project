@@ -22,18 +22,30 @@
                     <div class="panel-title">Upcoming Events</div>
                     {% if events %}
                         {% for event in events %}
-                        <!-- clicking the card takes you straight to the heatmap -->
-                        <a href="/event/{{ event.id }}/heatmap" class="event-card-link">
-                            <div class="event-card">
-                                <div>
-                                    <div class="event-card-name">{{ event.name }}</div>
-                                    <div class="event-card-sub">
-                                        {{ event.event_type }} · {{ event.members|length }} respondents · Waiting...
-                                    </div>
+                        <div class="event-card">
+                            <!-- left side: click to open heatmap -->
+                            <a href="/event/{{ event.id }}/heatmap" class="event-card-link">
+                                <div class="event-card-name">{{ event.name }}</div>
+                                <div class="event-card-sub">
+                                    {{ event.event_type }} · {{ event.members|length }} respondents · Waiting...
                                 </div>
-                                <span class="event-card-badge pending">PENDING</span>
-                            </div>
-                        </a>
+                            </a>
+
+                            <!-- right side: owner deletes, member leaves -->
+                            {% if event.organizer_id == current_user.id %}
+                                <form method="POST" action="/event/{{ event.id }}/delete"
+                                      onsubmit="return confirm('Delete {{ event.name }}? This removes it for everyone.')">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="event-action-btn delete">Delete</button>
+                                </form>
+                            {% else %}
+                                <form method="POST" action="/event/{{ event.id }}/leave"
+                                      onsubmit="return confirm('Leave {{ event.name }}?')">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="event-action-btn leave">Leave</button>
+                                </form>
+                            {% endif %}
+                        </div>
                         {% endfor %}
                     {% else %}
                         <p class="no-events">You have no upcoming events. Create one below!</p>

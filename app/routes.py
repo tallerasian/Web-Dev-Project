@@ -116,7 +116,8 @@ def event_heatmap(event_id):
             "from": event.date_from.isoformat() if event.date_from else "",
             "to":   event.date_to.isoformat()   if event.date_to   else "",
         }
-        return render_template("heatmap_days.html.jinja", event=event_data, is_owner=is_owner)
+        return render_template("heatmap_days.html.jinja",
+                               event=event_data, is_owner=is_owner, event_id=event.id)
     else:
         event_data = {
             "name":      event.name,
@@ -124,7 +125,8 @@ def event_heatmap(event_id):
             "time_from": event.time_from.strftime("%H:%M") if event.time_from else "09:00",
             "time_to":   event.time_to.strftime("%H:%M")   if event.time_to   else "17:00",
         }
-        return render_template("heatmap_times.html.jinja", event=event_data, is_owner=is_owner)
+        return render_template("heatmap_times.html.jinja",
+                               event=event_data, is_owner=is_owner, event_id=event.id)
 
 
 def generate_event_code():
@@ -172,6 +174,48 @@ def event_code():
     db.session.commit()
 
     return render_template("code.html.jinja", event=event, is_owner=True)
+
+
+@flask_app.route("/event/<int:event_id>/code")
+@login_required
+def event_view_code(event_id):
+    event = Event.query.get_or_404(event_id)
+    # only members can see the code
+    if not EventMember.query.filter_by(event_id=event_id, user_id=current_user.id).first():
+        abort(403)
+    return render_template("code.html.jinja", event=event, is_owner=(event.organizer_id == current_user.id))
+
+
+@flask_app.route("/event/<int:event_id>/delete", methods=["POST"])
+@login_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    # only the organiser can wipe the whole event
+    if event.organizer_id != current_user.id:
+        abort(403)
+
+    db.session.delete(event)  # cascade removes all EventMember rows too
+    db.session.commit()
+    return redirect(url_for("home_page"))
+
+
+@flask_app.route("/event/<int:event_id>/leave", methods=["POST"])
+@login_required
+def leave_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    # organiser can't "leave" — they'd need to delete the whole thing
+    if event.organizer_id == current_user.id:
+        abort(403)
+
+    membership = EventMember.query.filter_by(
+        event_id=event_id, user_id=current_user.id
+    ).first_or_404()
+
+    db.session.delete(membership)
+    db.session.commit()
+    return redirect(url_for("home_page"))
 
 
 @flask_app.route("/event/join", methods=["POST"])

@@ -35,7 +35,13 @@
     <aside class="side-panels">
       <div class="side-panel">
         {% if is_owner %}
-          <button class="copy-btn" onclick="goToInvite()">Next: Invite →</button>
+          {% if event_id %}
+            <!-- already saved — just show the existing code, don't create again -->
+            <a href="/event/{{ event_id }}/code" class="copy-btn">View Code →</a>
+          {% else %}
+            <!-- fresh create flow — generate and save the event -->
+            <button class="copy-btn" onclick="goToInvite()">Next: Invite →</button>
+          {% endif %}
         {% else %}
           <a href="/home" class="copy-btn">Done → Home</a>
         {% endif %}

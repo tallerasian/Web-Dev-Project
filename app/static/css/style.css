@@ -322,7 +322,38 @@ body.home-page {
 
 .event-card-link {
     text-decoration: none;
-    display: block;
+    flex: 1;
+    min-width: 0;
+}
+
+.event-action-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.event-action-btn.delete {
+    background: #c0392b;
+    color: #fff;
+}
+
+.event-action-btn.delete:hover {
+    background: #96281b;
+}
+
+.event-action-btn.leave {
+    background: #e8d5a3;
+    color: #5a2d00;
+}
+
+.event-action-btn.leave:hover {
+    background: #d4ba80;
 }
 
 .event-card:last-child {
