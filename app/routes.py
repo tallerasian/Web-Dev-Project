@@ -1,8 +1,9 @@
 from app import flask_app, db
-from app.models import User
+from app.models import User, Event, EventMember
 from app.forms import LoginForm, RegisterForm
-from flask import render_template, redirect, url_for, request, session
-from flask_login import login_required, login_user, logout_user
+from flask import render_template, redirect, url_for, request, abort
+from flask_login import login_required, login_user, logout_user, current_user
+from datetime import date, time
 import random
 import string
 
@@ -56,8 +57,11 @@ def logout():
 @flask_app.route("/home")
 @login_required
 def home_page():
-    events = session.get("events", [])
-    return render_template("home.html.jinja", events=events)
+    # grab every event this user is part of (as organiser or member)
+    memberships = EventMember.query.filter_by(user_id=current_user.id).all()
+    events = [m.event for m in memberships]
+    join_error = request.args.get("join_error")
+    return render_template("home.html.jinja", events=events, join_error=join_error)
 
 
 @flask_app.route("/event")
@@ -66,10 +70,11 @@ def create_event():
     return render_template("create_event.html.jinja")
 
 
+# still needed for the organiser's create flow (URL params, no DB event yet)
 @flask_app.route("/event/heatmap_times")
 @login_required
 def heatmap_times():
-    return render_template("heatmap_times.html.jinja", event={
+    return render_template("heatmap_times.html.jinja", is_owner=True, event={
         "name":      request.args.get("name", "My Event"),
         "days":      request.args.get("days", "0,1,2,3,4,5,6"),
         "time_from": request.args.get("timeFrom", "09:00"),
@@ -82,13 +87,44 @@ def heatmap_times():
 @flask_app.route("/event/heatmap_days")
 @login_required
 def heatmap_days():
-    return render_template("heatmap_days.html.jinja", event={
+    return render_template("heatmap_days.html.jinja", is_owner=True, event={
         "name":     request.args.get("name", "My Event"),
         "from":     request.args.get("from", ""),
         "to":       request.args.get("to", ""),
         "location": request.args.get("location", ""),
         "details":  request.args.get("details", ""),
     })
+
+
+# heatmap route for events already in the DB (join flow + revisiting your own event)
+@flask_app.route("/event/<int:event_id>/heatmap")
+@login_required
+def event_heatmap(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    # kick out anyone who isn't actually in this event
+    member = EventMember.query.filter_by(event_id=event_id, user_id=current_user.id).first()
+    if not member:
+        abort(403)
+
+    is_owner = (event.organizer_id == current_user.id)
+
+    # build a plain dict so both heatmap templates get the same shape regardless of source
+    if event.event_type == 'days':
+        event_data = {
+            "name": event.name,
+            "from": event.date_from.isoformat() if event.date_from else "",
+            "to":   event.date_to.isoformat()   if event.date_to   else "",
+        }
+        return render_template("heatmap_days.html.jinja", event=event_data, is_owner=is_owner)
+    else:
+        event_data = {
+            "name":      event.name,
+            "days":      event.days_of_week or "0,1,2,3,4,5,6",
+            "time_from": event.time_from.strftime("%H:%M") if event.time_from else "09:00",
+            "time_to":   event.time_to.strftime("%H:%M")   if event.time_to   else "17:00",
+        }
+        return render_template("heatmap_times.html.jinja", event=event_data, is_owner=is_owner)
 
 
 def generate_event_code():
@@ -98,19 +134,61 @@ def generate_event_code():
 @flask_app.route("/event/code")
 @login_required
 def event_code():
-    code       = generate_event_code()
+    # keep retrying until we land on a code that doesn't already exist
+    while True:
+        code = generate_event_code()
+        if not Event.query.filter_by(code=code).first():
+            break
+
     name       = request.args.get("name", "My Event")
     event_type = request.args.get("type", "days")
 
-    events = session.get("events", [])
-    events.append({
-        "code":             code,
-        "name":             name,
-        "type":             event_type,
-        "status":           "PENDING",
-        "respondent_count": 0,
-        "best_time":        None,
-    })
-    session["events"] = events
+    event = Event(
+        organizer_id = current_user.id,
+        code         = code,
+        name         = name,
+        location     = request.args.get("location", ""),
+        details      = request.args.get("details", ""),
+        event_type   = event_type,
+    )
 
-    return render_template("code.html.jinja", event={"name": name, "code": code})
+    if event_type == 'days':
+        raw_from = request.args.get("from", "")
+        raw_to   = request.args.get("to", "")
+        event.date_from = date.fromisoformat(raw_from) if raw_from else None
+        event.date_to   = date.fromisoformat(raw_to)   if raw_to   else None
+    else:
+        event.days_of_week = request.args.get("days", "0,1,2,3,4,5,6")
+        raw_from = request.args.get("timeFrom", "09:00")
+        raw_to   = request.args.get("timeTo",   "17:00")
+        event.time_from = time.fromisoformat(raw_from)
+        event.time_to   = time.fromisoformat(raw_to)
+
+    db.session.add(event)
+    db.session.flush()  # need event.id before we can create the membership row
+
+    # organiser counts as a member of their own event
+    db.session.add(EventMember(event_id=event.id, user_id=current_user.id))
+    db.session.commit()
+
+    return render_template("code.html.jinja", event=event, is_owner=True)
+
+
+@flask_app.route("/event/join", methods=["POST"])
+@login_required
+def join_event():
+    code = request.form.get("code", "").strip().upper()
+    event = Event.query.filter_by(code=code).first()
+
+    if not event:
+        return redirect(url_for("home_page", join_error="Code not found. Double-check and try again."))
+
+    # only insert a new membership if they're not already in
+    already_member = EventMember.query.filter_by(
+        event_id=event.id, user_id=current_user.id
+    ).first()
+    if not already_member:
+        db.session.add(EventMember(event_id=event.id, user_id=current_user.id))
+        db.session.commit()
+
+    return redirect(url_for("event_heatmap", event_id=event.id))
