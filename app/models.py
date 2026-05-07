@@ -20,3 +20,49 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return f"<User {self.username}>"
+
+
+class Event(db.Model):
+    id           = db.Column(db.Integer, primary_key=True)
+    organizer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    code         = db.Column(db.String(6),   unique=True, nullable=False)
+    name         = db.Column(db.String(120), nullable=False)
+    location     = db.Column(db.String(120), default='')
+    details      = db.Column(db.Text,        default='')
+
+    # either 'days' (specific date range) or 'week' (recurring days of the week)
+    event_type   = db.Column(db.String(10), nullable=False)
+
+    # only used when event_type == 'days'
+    date_from    = db.Column(db.Date, nullable=True)
+    date_to      = db.Column(db.Date, nullable=True)
+
+    # only used when event_type == 'week'
+    days_of_week = db.Column(db.String(20), nullable=True)  # stored as "0,2,4" etc.
+    time_from    = db.Column(db.Time, nullable=True)
+    time_to      = db.Column(db.Time, nullable=True)
+
+    created_at   = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # who made this event
+    organizer = db.relationship('User', backref='owned_events')
+
+    # everyone in the event (organiser included) — deleting the event cleans up members too
+    members   = db.relationship('EventMember', backref='event', cascade='all, delete-orphan')
+
+    def __repr__(self):
+        return f"<Event {self.code} '{self.name}'>"
+
+
+class EventMember(db.Model):
+    # tracks who's in which event — one row per user per event
+    id        = db.Column(db.Integer, primary_key=True)
+    event_id  = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    user_id   = db.Column(db.Integer, db.ForeignKey('user.id'),  nullable=False)
+    joined_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # can't join the same event twice
+    __table_args__ = (db.UniqueConstraint('event_id', 'user_id'),)
+
+    def __repr__(self):
+        return f"<EventMember event={self.event_id} user={self.user_id}>"
