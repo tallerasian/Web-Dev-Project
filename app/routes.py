@@ -112,9 +112,11 @@ def event_heatmap(event_id):
     # build a plain dict so both heatmap templates get the same shape regardless of source
     if event.event_type == 'days':
         event_data = {
-            "name": event.name,
-            "from": event.date_from.isoformat() if event.date_from else "",
-            "to":   event.date_to.isoformat()   if event.date_to   else "",
+            "name":     event.name,
+            "from":     event.date_from.isoformat() if event.date_from else "",
+            "to":       event.date_to.isoformat()   if event.date_to   else "",
+            "location": event.location or "",
+            "details":  event.details  or "",
         }
         return render_template("heatmap_days.html.jinja",
                                event=event_data, is_owner=is_owner, event_id=event.id)
@@ -124,6 +126,8 @@ def event_heatmap(event_id):
             "days":      event.days_of_week or "0,1,2,3,4,5,6",
             "time_from": event.time_from.strftime("%H:%M") if event.time_from else "09:00",
             "time_to":   event.time_to.strftime("%H:%M")   if event.time_to   else "17:00",
+            "location":  event.location or "",
+            "details":   event.details  or "",
         }
         return render_template("heatmap_times.html.jinja",
                                event=event_data, is_owner=is_owner, event_id=event.id)

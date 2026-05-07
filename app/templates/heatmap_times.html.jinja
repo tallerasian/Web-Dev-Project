@@ -36,10 +36,8 @@
       <div class="side-panel">
         {% if is_owner %}
           {% if event_id %}
-            <!-- already saved — just show the existing code, don't create again -->
             <a href="/event/{{ event_id }}/code" class="copy-btn">View Code →</a>
           {% else %}
-            <!-- fresh create flow — generate and save the event -->
             <button class="copy-btn" onclick="goToInvite()">Next: Invite →</button>
           {% endif %}
         {% else %}
@@ -51,6 +49,18 @@
         <p id="popular-value" class="side-panel-value">—</p>
         <p id="popular-count" class="side-panel-sub"></p>
       </div>
+      <!-- event info panel — shows location + details if they were set -->
+      {% if event.location or event.details %}
+      <div class="side-panel" id="event-info-panel">
+        <p class="side-panel-label">event info</p>
+        {% if event.location %}
+          <p class="side-panel-value">📍 {{ event.location }}</p>
+        {% endif %}
+        {% if event.details %}
+          <p class="side-panel-sub">{{ event.details }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
       <div class="side-panel hover-panel" id="hover-panel">
         <p class="side-panel-label">available</p>
         <p id="panel-title" class="side-panel-value">—</p>
@@ -62,10 +72,12 @@
 
 {% block scripts %}
   <script>
-    const EVENT_NAME      = {{ event.name      | tojson }};
-    const EVENT_DAYS      = {{ event.days      | tojson }};
+    const EVENT_NAME      = {{ event.name     | tojson }};
+    const EVENT_DAYS      = {{ event.days     | tojson }};
     const EVENT_TIME_FROM = {{ event.time_from | tojson }};
     const EVENT_TIME_TO   = {{ event.time_to   | tojson }};
+    const EVENT_LOCATION  = {{ (event.location or '') | tojson }};
+    const EVENT_DETAILS   = {{ (event.details  or '') | tojson }};
 
     function goToInvite() {
       const params = new URLSearchParams({
@@ -73,7 +85,9 @@
         type:     'week',
         days:     EVENT_DAYS,
         timeFrom: EVENT_TIME_FROM,
-        timeTo:   EVENT_TIME_TO
+        timeTo:   EVENT_TIME_TO,
+        location: EVENT_LOCATION,
+        details:  EVENT_DETAILS
       });
       window.location.href = '/event/code?' + params.toString();
     }
