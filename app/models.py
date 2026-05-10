@@ -45,10 +45,13 @@ class Event(db.Model):
     created_at   = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     # who made this event
-    organizer = db.relationship('User', backref='owned_events')
+    organizer      = db.relationship('User', backref='owned_events')
 
     # everyone in the event (organiser included) — deleting the event cleans up members too
-    members   = db.relationship('EventMember', backref='event', cascade='all, delete-orphan')
+    members        = db.relationship('EventMember',  backref='event', cascade='all, delete-orphan')
+
+    # selected heatmap slots — deleting the event wipes these too
+    availabilities = db.relationship('Availability', backref='event', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<Event {self.code} '{self.name}'>"
@@ -66,3 +69,29 @@ class EventMember(db.Model):
 
     def __repr__(self):
         return f"<EventMember event={self.event_id} user={self.user_id}>"
+
+
+class Availability(db.Model):
+    # one row per selected slot per user per event
+    id       = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    user_id  = db.Column(db.Integer, db.ForeignKey('user.id'),  nullable=False)
+    slot_key = db.Column(db.String(20), nullable=False)  # "YYYY-MM-DD" or "dayIndex-absoluteSlot"
+
+    __table_args__ = (db.UniqueConstraint('event_id', 'user_id', 'slot_key'),)
+
+    def __repr__(self):
+        return f"<Availability event={self.event_id} user={self.user_id} slot={self.slot_key}>"
+
+
+class Availability(db.Model):
+    # one row per selected slot per user per event
+    id       = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    user_id  = db.Column(db.Integer, db.ForeignKey('user.id'),  nullable=False)
+    slot_key = db.Column(db.String(20), nullable=False)  # "YYYY-MM-DD" or "dayIndex-absoluteSlot"
+
+    __table_args__ = (db.UniqueConstraint('event_id', 'user_id', 'slot_key'),)
+
+    def __repr__(self):
+        return f"<Availability event={self.event_id} user={self.user_id} slot={self.slot_key}>"
