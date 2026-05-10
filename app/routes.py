@@ -1,7 +1,7 @@
 from app import flask_app, db
-from app.models import User, Event, EventMember
+from app.models import User, Event, EventMember, Availability
 from app.forms import LoginForm, RegisterForm
-from flask import render_template, redirect, url_for, request, abort
+from flask import render_template, redirect, url_for, request, abort, jsonify
 from flask_login import login_required, login_user, logout_user, current_user
 from datetime import date, time
 import random
@@ -220,6 +220,83 @@ def leave_event(event_id):
     db.session.delete(membership)
     db.session.commit()
     return redirect(url_for("home_page"))
+
+
+@flask_app.route("/event/new", methods=["POST"])
+@login_required
+def create_event_post():
+    name       = request.form.get("name", "My Event")
+    event_type = request.form.get("type", "days")
+
+    while True:
+        code = generate_event_code()
+        if not Event.query.filter_by(code=code).first():
+            break
+
+    event = Event(
+        organizer_id = current_user.id,
+        code         = code,
+        name         = name,
+        location     = request.form.get("location", ""),
+        details      = request.form.get("details", ""),
+        event_type   = event_type,
+    )
+
+    if event_type == 'days':
+        raw_from = request.form.get("from", "")
+        raw_to   = request.form.get("to",   "")
+        event.date_from = date.fromisoformat(raw_from) if raw_from else None
+        event.date_to   = date.fromisoformat(raw_to)   if raw_to   else None
+    else:
+        event.days_of_week = request.form.get("days", "0,1,2,3,4,5,6")
+        event.time_from = time.fromisoformat(request.form.get("timeFrom", "09:00"))
+        event.time_to   = time.fromisoformat(request.form.get("timeTo",   "17:00"))
+
+    db.session.add(event)
+    db.session.flush()
+    db.session.add(EventMember(event_id=event.id, user_id=current_user.id))
+    db.session.commit()
+    return redirect(url_for("event_heatmap", event_id=event.id))
+
+
+@flask_app.route("/event/<int:event_id>/availability", methods=["GET"])
+@login_required
+def get_availability(event_id):
+    if not EventMember.query.filter_by(event_id=event_id, user_id=current_user.id).first():
+        abort(403)
+
+    rows        = Availability.query.filter_by(event_id=event_id).all()
+    my_slots    = [r.slot_key for r in rows if r.user_id == current_user.id]
+    group_data  = {}
+    people_data = {}
+
+    for r in rows:
+        group_data[r.slot_key] = group_data.get(r.slot_key, 0) + 1
+        user    = User.query.get(r.user_id)
+        display = "You" if r.user_id == current_user.id else (user.first_name if user else "?")
+        bucket  = people_data.setdefault(r.slot_key, [])
+        if r.user_id == current_user.id:
+            bucket.insert(0, "You")
+        else:
+            bucket.append(display)
+
+    return jsonify(my_slots=my_slots, group_data=group_data, people_data=people_data)
+
+
+@flask_app.route("/event/<int:event_id>/availability", methods=["POST"])
+@login_required
+def save_availability(event_id):
+    if not EventMember.query.filter_by(event_id=event_id, user_id=current_user.id).first():
+        abort(403)
+
+    data      = request.get_json(silent=True) or {}
+    slot_keys = data.get("slots", [])
+
+    Availability.query.filter_by(event_id=event_id, user_id=current_user.id).delete()
+    for key in slot_keys:
+        db.session.add(Availability(event_id=event_id, user_id=current_user.id, slot_key=key))
+    db.session.commit()
+    return jsonify(ok=True)
 
 
 @flask_app.route("/event/join", methods=["POST"])
