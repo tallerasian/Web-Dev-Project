@@ -132,8 +132,15 @@ function render() {
   }
 
   container.innerHTML = html;
+}
 
-  // Attach drag listeners to the grid (event delegation)
+function initListeners() {
+  const container = document.getElementById('grid');
+  if (!container) return;
+
+  // Prevent text selection while dragging
+  container.addEventListener('mousedown', e => e.preventDefault());
+
   container.addEventListener('mousedown', e => {
     if (!e.target.dataset.key) return;
     isDragging = true;
@@ -146,9 +153,6 @@ function render() {
   });
 
   container.addEventListener('mouseleave', clearPanel);
-
-  // Prevent text selection while dragging
-  container.addEventListener('mousedown', e => e.preventDefault());
 }
 
 function slotFullLabel(absoluteSlot) {
@@ -218,6 +222,7 @@ document.addEventListener('mouseup', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   render();
+  initListeners();
   updatePopular();
   initShareCode();
   if (EVENT_ID) loadAvailability();

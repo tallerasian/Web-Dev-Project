@@ -307,6 +307,9 @@ body {
 }
 
 .copy-btn {
+  display: block;
+  text-align: center;
+  text-decoration: none;
   background: none;
   border: 1.5px solid var(--brown-mid);
   border-radius: 6px;
