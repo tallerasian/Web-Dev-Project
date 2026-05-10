@@ -191,7 +191,6 @@ function updatePopular() {
   countEl.textContent = `${bestCount} ${bestCount === 1 ? 'person' : 'people'}`;
 }
 
-// 
 document.addEventListener('DOMContentLoaded', () => {
   if (EVENT_ID) {
     loadAvailability();

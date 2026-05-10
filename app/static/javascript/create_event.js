@@ -4,7 +4,7 @@ const MONTH_NAMES = [
 ];
 const DAY_HEADERS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
 
-let currentType = null; 
+let currentType = null;
 
 // Mini calendar state
 let calYear  = new Date().getFullYear();
@@ -155,10 +155,10 @@ function toggleWeekDay(el) {
 }
 
 // VALIDATION & NEXT
-//Checks include: - Event name is not empty 
-//                - For "Specific Days": at least a start date is selected 
-//                - For "Days of Week": at least one day is selected 
-//                - Time range is optional, but if provided, should be valid 
+//Checks include: - Event name is not empty
+//                - For "Specific Days": at least a start date is selected
+//                - For "Days of Week": at least one day is selected
+//                - Time range is optional, but if provided, should be valid
 
 function submitToServer(fields) {
   const form = document.createElement('form');
