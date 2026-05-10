@@ -23,8 +23,6 @@
     --calender-light-orange: #ffbe4a;
     --calender-yellow: #fddc8a;
     --calender-white: #fef2db;
-    --reg-black: #000000;
-
     /* Heatmap / create-event palette */
     --bg:         #F0A500;
     --brown-dark: #3D2B00;
@@ -169,20 +167,6 @@ body.login-page {
     background-color: #fff4dd;
     border: 1.5px solid #f68b26;
     padding: 8px 14px;
-}
-
-.join-link {
-    margin-top: 28px;
-    color: var(--calender-dark-orange);
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    text-decoration: none;
-    letter-spacing: 0.01em;
-    transition: color 0.15s;
-}
-
-.join-link:hover {
-    color: #ffffff;
 }
 
 
@@ -376,21 +360,6 @@ body.home-page {
     color: #a07040;
 }
 
-.event-card-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    padding: 5px 12px;
-    border-radius: 20px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    background: var(--calender-dark-orange);
-    color: #fff;
-}
-
-.event-card-badge.pending {
-    background: #5a2d00;
-}
 
 .mini-calendar {
     background: #fdf6e8;
