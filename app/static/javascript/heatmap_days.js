@@ -174,21 +174,52 @@ function copyCode() {
 }
 
 function updatePopular() {
-  let bestKey = null, bestCount = 0;
-  for (const [k, count] of Object.entries(groupData)) {
-    if (count > bestCount) { bestCount = count; bestKey = k; }
-  }
   const valueEl = document.getElementById('popular-value');
   const countEl = document.getElementById('popular-count');
-  if (!bestKey || bestCount === 0) {
+
+  const entries = Object.entries(groupData).filter(([, v]) => v > 0);
+  if (entries.length === 0) {
     valueEl.textContent = '—';
     countEl.textContent = '';
     return;
   }
-  const [y, m, d] = bestKey.split('-');
-  const date = new Date(+y, +m - 1, +d);
-  valueEl.textContent = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-  countEl.textContent = `${bestCount} ${bestCount === 1 ? 'person' : 'people'}`;
+
+  const maxCount = Math.max(...entries.map(([, v]) => v));
+
+  // all days tied at the max, sorted chronologically
+  const topDays = entries
+    .filter(([, v]) => v === maxCount)
+    .map(([k]) => k)
+    .sort();
+
+  // split into runs of consecutive calendar days
+  const streaks = [];
+  let streak = [topDays[0]];
+  for (let i = 1; i < topDays.length; i++) {
+    const [y, m, d] = topDays[i - 1].split('-').map(Number);
+    const next = new Date(y, m - 1, d + 1);
+    const nextKey = `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, '0')}-${String(next.getDate()).padStart(2, '0')}`;
+    if (nextKey === topDays[i]) {
+      streak.push(topDays[i]);
+    } else {
+      streaks.push(streak);
+      streak = [topDays[i]];
+    }
+  }
+  streaks.push(streak);
+
+  // pick the longest streak; tie goes to the first
+  const best = streaks.reduce((a, b) => b.length > a.length ? b : a);
+
+  const fmtKey = key => {
+    const [y, m, d] = key.split('-');
+    return new Date(+y, +m - 1, +d).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  };
+
+  valueEl.textContent = best.length === 1
+    ? fmtKey(best[0])
+    : `${fmtKey(best[0])} → ${fmtKey(best[best.length - 1])}`;
+  countEl.textContent = `${maxCount} ${maxCount === 1 ? 'person' : 'people'}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
