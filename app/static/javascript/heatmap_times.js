@@ -199,20 +199,53 @@ function copyCode() {
 }
 
 function updatePopular() {
-  let bestKey = null, bestCount = 0;
-  for (const [k, count] of Object.entries(groupData)) {
-    if (count > bestCount) { bestCount = count; bestKey = k; }
-  }
   const valueEl = document.getElementById('popular-value');
   const countEl = document.getElementById('popular-count');
-  if (!bestKey || bestCount === 0) {
+
+  const entries = Object.entries(groupData).filter(([, v]) => v > 0);
+  if (entries.length === 0) {
     valueEl.textContent = '—';
     countEl.textContent = '';
     return;
   }
-  const [d, s] = bestKey.split('-').map(Number);
-  valueEl.textContent = `${ALL_DAY_NAMES[d]}, ${slotFullLabel(s)}`;
-  countEl.textContent = `${bestCount} ${bestCount === 1 ? 'person' : 'people'}`;
+
+  const maxCount = Math.max(...entries.map(([, v]) => v));
+
+  // group top slots by day
+  const byDay = {};
+  for (const [k] of entries.filter(([, v]) => v === maxCount)) {
+    const [d, s] = k.split('-').map(Number);
+    (byDay[d] = byDay[d] || []).push(s);
+  }
+
+  // find all consecutive runs within each day
+  const streaks = [];
+  for (const [day, slots] of Object.entries(byDay)) {
+    const d = Number(day);
+    slots.sort((a, b) => a - b);
+    let run = [slots[0]];
+    for (let i = 1; i < slots.length; i++) {
+      if (slots[i] === slots[i - 1] + 1) {
+        run.push(slots[i]);
+      } else {
+        streaks.push({ day: d, slots: run });
+        run = [slots[i]];
+      }
+    }
+    streaks.push({ day: d, slots: run });
+  }
+
+  // pick longest streak; tie goes to first found
+  const best = streaks.reduce((a, b) => b.slots.length > a.slots.length ? b : a);
+
+  if (best.slots.length === 1) {
+    valueEl.textContent = `${ALL_DAY_NAMES[best.day]}, ${slotFullLabel(best.slots[0])}`;
+  } else {
+    const start = slotFullLabel(best.slots[0]);
+    const end   = slotFullLabel(best.slots[best.slots.length - 1] + 1);
+    valueEl.textContent = `${ALL_DAY_NAMES[best.day]}, ${start} → ${end}`;
+  }
+  countEl.textContent = `${maxCount} ${maxCount === 1 ? 'person' : 'people'}`;
 }
 
 document.addEventListener('mouseup', () => {
