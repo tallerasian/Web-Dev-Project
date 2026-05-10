@@ -22,6 +22,26 @@ const groupData  = {};
 const myData     = {};
 const peopleData = {}; // key -> string[]
 
+async function loadAvailability() {
+  if (!EVENT_ID) return;
+  const res  = await fetch(`/event/${EVENT_ID}/availability`);
+  const data = await res.json();
+  for (const key of data.my_slots)                        myData[key]    = true;
+  for (const [k, v] of Object.entries(data.group_data))  groupData[k]   = Math.min(v, 5);
+  for (const [k, v] of Object.entries(data.people_data)) peopleData[k]  = v;
+  render();
+  updatePopular();
+}
+
+async function saveAvailability() {
+  if (!EVENT_ID) return;
+  await fetch(`/event/${EVENT_ID}/availability`, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+    body:    JSON.stringify({ slots: Object.keys(myData) })
+  });
+}
+
 // key: "dayIndex-absoluteSlot" — dayIndex is original 0-6, slot is absolute (not relative)
 function slotKey(day, slot) {
   return `${day}-${START_SLOT + slot}`;
@@ -191,10 +211,14 @@ function updatePopular() {
   countEl.textContent = `${bestCount} ${bestCount === 1 ? 'person' : 'people'}`;
 }
 
-document.addEventListener('mouseup', () => { isDragging = false; });
+document.addEventListener('mouseup', () => {
+  if (isDragging) saveAvailability();
+  isDragging = false;
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   render();
   updatePopular();
   initShareCode();
+  if (EVENT_ID) loadAvailability();
 });

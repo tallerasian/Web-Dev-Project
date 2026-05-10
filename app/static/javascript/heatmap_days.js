@@ -26,6 +26,26 @@ const groupData  = {};
 const myData     = {};
 const peopleData = {}; // key -> string[]
 
+async function loadAvailability() {
+  if (!EVENT_ID) return;
+  const res  = await fetch(`/event/${EVENT_ID}/availability`);
+  const data = await res.json();
+  for (const key of data.my_slots)                        myData[key]    = true;
+  for (const [k, v] of Object.entries(data.group_data))  groupData[k]   = Math.min(v, 5);
+  for (const [k, v] of Object.entries(data.people_data)) peopleData[k]  = v;
+  render();
+  updatePopular();
+}
+
+async function saveAvailability() {
+  if (!EVENT_ID) return;
+  await fetch(`/event/${EVENT_ID}/availability`, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+    body:    JSON.stringify({ slots: Object.keys(myData) })
+  });
+}
+
 function dateKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }
@@ -64,6 +84,7 @@ function toggleDay(el) {
 
   render();
   updatePopular();
+  saveAvailability();
 }
 
 function render() {
@@ -172,7 +193,11 @@ function updatePopular() {
 
 // 
 document.addEventListener('DOMContentLoaded', () => {
-  render();
-  updatePopular();
+  if (EVENT_ID) {
+    loadAvailability();
+  } else {
+    render();
+    updatePopular();
+  }
   initShareCode();
 });
