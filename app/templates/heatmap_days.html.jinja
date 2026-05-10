@@ -77,6 +77,8 @@
     const EVENT_DATE_TO   = {{ event.to       | tojson }};
     const EVENT_LOCATION  = {{ (event.location or '') | tojson }};
     const EVENT_DETAILS   = {{ (event.details  or '') | tojson }};
+    const EVENT_ID        = {{ event_id | tojson if event_id is defined and event_id != None else 'null' }};
+    const CSRF_TOKEN      = {{ csrf_token() | tojson }};
 
     function goToInvite() {
       const params = new URLSearchParams({
