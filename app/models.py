@@ -82,16 +82,3 @@ class Availability(db.Model):
 
     def __repr__(self):
         return f"<Availability event={self.event_id} user={self.user_id} slot={self.slot_key}>"
-
-
-class Availability(db.Model):
-    # one row per selected slot per user per event
-    id       = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
-    user_id  = db.Column(db.Integer, db.ForeignKey('user.id'),  nullable=False)
-    slot_key = db.Column(db.String(20), nullable=False)  # "YYYY-MM-DD" or "dayIndex-absoluteSlot"
-
-    __table_args__ = (db.UniqueConstraint('event_id', 'user_id', 'slot_key'),)
-
-    def __repr__(self):
-        return f"<Availability event={self.event_id} user={self.user_id} slot={self.slot_key}>"
