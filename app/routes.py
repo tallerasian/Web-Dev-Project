@@ -3,14 +3,10 @@ from flask import render_template
 import random
 import string
 
-
 @flask_app.route("/")
 def home_page():
     return render_template("home.html")
 
-@flask_app.route("/register")
-def register():
-    return render_template("register.html")
 
 @flask_app.route("/login")
 def login_page():
