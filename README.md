@@ -86,8 +86,8 @@ For full coverage, open **two separate browser windows** (or use a private/incog
 **Purpose:** Verify event creation using a date range with a calendar picker.
 
 1. Log into `alice` account and click **Create Event** on the dashboard.
-2. Enter an event name (e.g. `Study Group`) and optionally a location and details.
-3. Select **Specific Days** as the event type.
+2. Select **Specific Days** as the event type.
+3. Enter an event name (e.g. `Study Group`) and optionally a location and details.
 4. Pick a date range using the calendar (e.g. the next 7 days).
 5. Click **Create Event**.
 6. You should land on the **availability heatmap** for the selected dates.
@@ -101,8 +101,8 @@ For full coverage, open **two separate browser windows** (or use a private/incog
 **Purpose:** Verify event creation for recurring weekly schedules.
 
 1. Log in as `alice` and click **Create Event**.
-2. Enter an event name (e.g. `Weekly Sync`).
-3. Select **Days of the Week** as the event type.
+2. Select **Days of the Week** as the event type.
+3. Enter an event name (e.g. `Weekly Meetup`).
 4. Choose which days (e.g. Mon, Wed, Fri) and a time range (e.g. 9:00 AM – 5:00 PM).
 5. Click **Create Event**.
 6. You should land on the **time-slot heatmap** for the selected days and time range.
@@ -136,8 +136,6 @@ For full coverage, open **two separate browser windows** (or use a private/incog
 
 1. Log in as `alice`, who should now have at least two events.
 2. On the dashboard, confirm both events appear in the **My Events** tab.
-3. Click the **Calendar** tab — events should appear on their respective dates.
-4. Click on an event card to navigate back to its heatmap.
 
 ---
 
