@@ -6,25 +6,46 @@ const MONTH_NAMES = [
 const DAY_NAMES = ['Su','Mo','Tu','We','Th','Fr','Sa'];
 
 const today = new Date();
-const later = new Date(today);
-later.setDate(later.getDate() + 30);
 
-let range = {
-  from: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
-  to:   new Date(later.getFullYear(), later.getMonth(), later.getDate())
-};
+function parseDateLocal(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
 
-let viewYear  = today.getFullYear();
-let viewMonth = today.getMonth();
+const rangeFrom = EVENT_DATE_FROM ? parseDateLocal(EVENT_DATE_FROM) : today;
+const rangeTo   = EVENT_DATE_TO   ? parseDateLocal(EVENT_DATE_TO)   : (() => {
+  const d = new Date(today); d.setDate(d.getDate() + 30); return d;
+})();
+
+let range = { from: rangeFrom, to: rangeTo };
+
+let viewYear  = range.from.getFullYear();
+let viewMonth = range.from.getMonth();
 
 const groupData  = {};
 const myData     = {};
 const peopleData = {}; // key -> string[]
 
-// Fake participant names for demo
-const FAKE_NAMES = ['Alice','Ben','Clara','Diego','Eva','Felix','Grace','Hugo','Isla','Jake'];
+async function loadAvailability() {
+  if (!EVENT_ID) return;
+  const res  = await fetch(`/event/${EVENT_ID}/availability`);
+  const data = await res.json();
+  for (const key of data.my_slots)                        myData[key]    = true;
+  for (const [k, v] of Object.entries(data.group_data))  groupData[k]   = Math.min(v, 5);
+  for (const [k, v] of Object.entries(data.people_data)) peopleData[k]  = v;
+  render();
+  updatePopular();
+}
 
-// For demo: seed some random data for the whole range
+async function saveAvailability() {
+  if (!EVENT_ID) return;
+  await fetch(`/event/${EVENT_ID}/availability`, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+    body:    JSON.stringify({ slots: Object.keys(myData) })
+  });
+}
+
 function dateKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }
@@ -38,24 +59,6 @@ function isInRange(y, m, d) {
   return dt >= range.from && dt <= range.to;
 }
 
-function seedGroupData() {
-  const cur = new Date(range.from);
-  while (cur <= range.to) {
-    const k   = fmtDate(cur);
-    const dow = cur.getDay();
-    const mid     = cur.getDate() >= 8 && cur.getDate() <= 22;
-    const weekend = dow === 0 || dow === 6;
-    if (groupData[k] === undefined) {
-      let count;
-      if (!weekend && mid)  count = Math.floor(Math.random() * 3) + 2;
-      else if (!weekend)    count = Math.floor(Math.random() * 2) + 1;
-      else                  count = Math.random() < 0.3 ? 1 : 0;
-      groupData[k]  = count;
-      peopleData[k] = FAKE_NAMES.slice().sort(() => 0.5 - Math.random()).slice(0, count);
-    }
-    cur.setDate(cur.getDate() + 1);
-  }
-}
 
 function changeMonth(dir) {
   viewMonth += dir;
@@ -81,6 +84,7 @@ function toggleDay(el) {
 
   render();
   updatePopular();
+  saveAvailability();
 }
 
 function render() {
@@ -170,27 +174,60 @@ function copyCode() {
 }
 
 function updatePopular() {
-  let bestKey = null, bestCount = 0;
-  for (const [k, count] of Object.entries(groupData)) {
-    if (count > bestCount) { bestCount = count; bestKey = k; }
-  }
   const valueEl = document.getElementById('popular-value');
   const countEl = document.getElementById('popular-count');
-  if (!bestKey || bestCount === 0) {
+
+  const entries = Object.entries(groupData).filter(([, v]) => v > 0);
+  if (entries.length === 0) {
     valueEl.textContent = '—';
     countEl.textContent = '';
     return;
   }
-  const [y, m, d] = bestKey.split('-');
-  const date = new Date(+y, +m - 1, +d);
-  valueEl.textContent = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-  countEl.textContent = `${bestCount} ${bestCount === 1 ? 'person' : 'people'}`;
+
+  const maxCount = Math.max(...entries.map(([, v]) => v));
+
+  // all days tied at the max, sorted chronologically
+  const topDays = entries
+    .filter(([, v]) => v === maxCount)
+    .map(([k]) => k)
+    .sort();
+
+  // split into runs of consecutive calendar days
+  const streaks = [];
+  let streak = [topDays[0]];
+  for (let i = 1; i < topDays.length; i++) {
+    const [y, m, d] = topDays[i - 1].split('-').map(Number);
+    const next = new Date(y, m - 1, d + 1);
+    const nextKey = `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, '0')}-${String(next.getDate()).padStart(2, '0')}`;
+    if (nextKey === topDays[i]) {
+      streak.push(topDays[i]);
+    } else {
+      streaks.push(streak);
+      streak = [topDays[i]];
+    }
+  }
+  streaks.push(streak);
+
+  // pick the longest streak; tie goes to the first
+  const best = streaks.reduce((a, b) => b.length > a.length ? b : a);
+
+  const fmtKey = key => {
+    const [y, m, d] = key.split('-');
+    return new Date(+y, +m - 1, +d).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  };
+
+  valueEl.textContent = best.length === 1
+    ? fmtKey(best[0])
+    : `${fmtKey(best[0])} → ${fmtKey(best[best.length - 1])}`;
+  countEl.textContent = `${maxCount} ${maxCount === 1 ? 'person' : 'people'}`;
 }
 
-// 
 document.addEventListener('DOMContentLoaded', () => {
-  seedGroupData();
-  render();
-  updatePopular();
+  if (EVENT_ID) {
+    loadAvailability();
+  } else {
+    render();
+    updatePopular();
+  }
   initShareCode();
 });
