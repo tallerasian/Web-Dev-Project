@@ -50,9 +50,29 @@ In order to launch the application, a virtual environment with the necessary mod
 
     flask --app app run
 
-The app can then be accessed from http://localhost:5000
+The app can then be accessed from http://localhost:5000. 
 
->Stop running local host
+---
+
+### Hosting on LAN
+
+Alternatively, the app can be hosted on LAN, where devices on the same network can connect to the app.
+
+>Run application for LAN
+
+    flask --app app run --host 0.0.0.0 --with-threads
+
+The flask app will log the URLs that it is serving on for localhost and LAN.
+
+    * Running on all addresses (0.0.0.0)
+    * Running on http://127.0.0.1:5000
+    * Running on http://[LAN IP]:5000 <- enter into other device browser
+
+This may not work on certain networks (such as library or university Wi-Fi) that block connections between devices. The host must also configure their firewall to open the appropriate port for traffic (i.e. port 5000)
+
+---
+
+>Stop running application
 
     Press [CTRL + C] to quit
 
