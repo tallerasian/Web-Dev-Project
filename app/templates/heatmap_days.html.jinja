@@ -34,13 +34,33 @@
     </div>
     <aside class="side-panels">
       <div class="side-panel">
-        <button class="copy-btn" onclick="window.location.href='{{ url_for('event_code') }}'">Next: Invite →</button>
+        {% if is_owner %}
+          {% if event_id %}
+            <a href="/event/{{ event_id }}/code" class="copy-btn">View Code →</a>
+          {% else %}
+            <button class="copy-btn" onclick="goToInvite()">Next: Invite →</button>
+          {% endif %}
+        {% else %}
+          <a href="/home" class="copy-btn">Done</a>
+        {% endif %}
       </div>
       <div class="side-panel" id="popular-panel">
         <p class="side-panel-label">most popular</p>
         <p id="popular-value" class="side-panel-value">—</p>
         <p id="popular-count" class="side-panel-sub"></p>
       </div>
+      <!-- event info panel — shows location + details if they were set -->
+      {% if event.location or event.details %}
+      <div class="side-panel" id="event-info-panel">
+        <p class="side-panel-label">event info</p>
+        {% if event.location %}
+          <p class="side-panel-value">📍 {{ event.location }}</p>
+        {% endif %}
+        {% if event.details %}
+          <p class="side-panel-sub">{{ event.details }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
       <div class="side-panel hover-panel" id="hover-panel">
         <p class="side-panel-label">available</p>
         <p id="panel-title" class="side-panel-value">—</p>
@@ -51,5 +71,26 @@
 {% endblock %}
 
 {% block scripts %}
+  <script>
+    const EVENT_NAME      = {{ event.name     | tojson }};
+    const EVENT_DATE_FROM = {{ event.from     | tojson }};
+    const EVENT_DATE_TO   = {{ event.to       | tojson }};
+    const EVENT_LOCATION  = {{ (event.location or '') | tojson }};
+    const EVENT_DETAILS   = {{ (event.details  or '') | tojson }};
+    const EVENT_ID        = {{ event_id | tojson if event_id is defined and event_id != None else 'null' }};
+    const CSRF_TOKEN      = {{ csrf_token() | tojson }};
+
+    function goToInvite() {
+      const params = new URLSearchParams({
+        name:     EVENT_NAME,
+        type:     'days',
+        from:     EVENT_DATE_FROM,
+        to:       EVENT_DATE_TO,
+        location: EVENT_LOCATION,
+        details:  EVENT_DETAILS
+      });
+      window.location.href = '/event/code?' + params.toString();
+    }
+  </script>
   <script src="{{ url_for('static', filename='javascript/heatmap_days.js') }}"></script>
 {% endblock %}

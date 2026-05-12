@@ -12,7 +12,7 @@
 
 
 /*  ============================================
-    1. CSS VARIABLES & RESET  (all pages) 
+    1. CSS VARIABLES & RESET  (all pages)
     =============================================*/
 
 :root {
@@ -23,8 +23,6 @@
     --calender-light-orange: #ffbe4a;
     --calender-yellow: #fddc8a;
     --calender-white: #fef2db;
-    --reg-black: #000000;
-
     /* Heatmap / create-event palette */
     --bg:         #F0A500;
     --brown-dark: #3D2B00;
@@ -137,6 +135,7 @@ body.login-page {
     letter-spacing: 0.02em;
     padding: 4px 2px;
     transition: color 0.15s;
+    text-decoration: none;
 }
 
 .btn:hover {
@@ -168,20 +167,6 @@ body.login-page {
     background-color: #fff4dd;
     border: 1.5px solid #f68b26;
     padding: 8px 14px;
-}
-
-.join-link {
-    margin-top: 28px;
-    color: var(--calender-dark-orange);
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    text-decoration: none;
-    letter-spacing: 0.01em;
-    transition: color 0.15s;
-}
-
-.join-link:hover {
-    color: #ffffff;
 }
 
 
@@ -228,8 +213,8 @@ body.home-page {
     letter-spacing: 0.02em;
 }
 
-.icon-btn {
-    background: #e8e0d0;
+.logout-btn {
+    background: #c0392b;
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -237,12 +222,14 @@ body.home-page {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    color: #fff;
     cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
 }
 
-.icon-btn:hover {
-    background: var(--calender-white);
+.logout-btn:hover {
+    background: #96281b;
 }
 
 .home-nav-tabs {
@@ -317,6 +304,42 @@ body.home-page {
     border: 1px solid rgba(200, 160, 80, 0.15);
 }
 
+.event-card-link {
+    text-decoration: none;
+    flex: 1;
+    min-width: 0;
+}
+
+.event-action-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.event-action-btn.delete {
+    background: #c0392b;
+    color: #fff;
+}
+
+.event-action-btn.delete:hover {
+    background: #96281b;
+}
+
+.event-action-btn.leave {
+    background: #e8d5a3;
+    color: #5a2d00;
+}
+
+.event-action-btn.leave:hover {
+    background: #d4ba80;
+}
+
 .event-card:last-child {
     margin-bottom: 0;
 }
@@ -337,21 +360,6 @@ body.home-page {
     color: #a07040;
 }
 
-.event-card-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    padding: 5px 12px;
-    border-radius: 20px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    background: var(--calender-dark-orange);
-    color: #fff;
-}
-
-.event-card-badge.pending {
-    background: #5a2d00;
-}
 
 .mini-calendar {
     background: #fdf6e8;

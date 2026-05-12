@@ -4,7 +4,7 @@ const MONTH_NAMES = [
 ];
 const DAY_HEADERS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
 
-let currentType = null; 
+let currentType = null;
 
 // Mini calendar state
 let calYear  = new Date().getFullYear();
@@ -155,13 +155,36 @@ function toggleWeekDay(el) {
 }
 
 // VALIDATION & NEXT
-//Checks include: - Event name is not empty 
-//                - For "Specific Days": at least a start date is selected 
-//                - For "Days of Week": at least one day is selected 
-//                - Time range is optional, but if provided, should be valid 
+//Checks include: - Event name is not empty
+//                - For "Specific Days": at least a start date is selected
+//                - For "Days of Week": at least one day is selected
+//                - Time range is optional, but if provided, should be valid
+
+function submitToServer(fields) {
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/event/new';
+
+  const csrf = document.createElement('input');
+  csrf.type  = 'hidden';
+  csrf.name  = 'csrf_token';
+  csrf.value = CSRF_TOKEN;
+  form.appendChild(csrf);
+
+  for (const [key, val] of Object.entries(fields)) {
+    const inp = document.createElement('input');
+    inp.type  = 'hidden';
+    inp.name  = key;
+    inp.value = val;
+    form.appendChild(inp);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+}
 
 function handleNext() {
-  const name     = document.getElementById('event-name').value.trim();
+  const name = document.getElementById('event-name').value.trim();
 
   if (!name) {
     alert('Please enter an event name.');
@@ -174,32 +197,29 @@ function handleNext() {
       alert('Please select a start date.');
       return;
     }
-    // Specific Days: no time range needed
-    const params = new URLSearchParams({
+    submitToServer({
+      type:     'days',
       name:     name,
       location: document.getElementById('event-location').value.trim(),
       details:  document.getElementById('event-details').value.trim(),
       from:     rangeFrom,
       to:       rangeTo || rangeFrom
     });
-    window.location.href = `/event/heatmap_days?${params.toString()}`;
 
   } else {
     if (selectedDays.size === 0) {
       alert('Please select at least one day of the week.');
       return;
     }
-    const timeFrom = document.getElementById('time-from').value;
-    const timeTo   = document.getElementById('time-to').value;
-    const params = new URLSearchParams({
+    submitToServer({
+      type:     'week',
       name:     name,
       location: document.getElementById('event-location').value.trim(),
       details:  document.getElementById('event-details').value.trim(),
       days:     Array.from(selectedDays).sort().join(','),
-      timeFrom: timeFrom,
-      timeTo:   timeTo
+      timeFrom: document.getElementById('time-from').value,
+      timeTo:   document.getElementById('time-to').value
     });
-    window.location.href = `/event/heatmap_times?${params.toString()}`;
   }
 }
 

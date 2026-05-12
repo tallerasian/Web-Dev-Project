@@ -1,9 +1,6 @@
 {% extends "base.html.jinja" %}
 {% block title %}Login{% endblock %}
 {% block body_class %}login-page{% endblock %}
-{% block extra_head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-{% endblock %}
 
 {% block body %}
 <div class="login-container">
@@ -11,21 +8,22 @@
         <svg width="36" height="36" viewBox="0 0 100 100"><use href="#synced-logo"/></svg> ynced
     </div>
 
-    <input id="username" class="input-field" type="text" placeholder="Username:" />
-    <input id="password" class="input-field" type="password" placeholder="Password:" />
+    <form id="loginForm" action="/login" method="POST">
+        {{ form.hidden_tag() }}
+        <input id="username" name="username" class="input-field" type="text" placeholder="Username:" />
+        <input id="password" name="password" class="input-field" type="password" placeholder="Password:" />
 
-    <div class="actions">
-        <a href="/register" id="registerBtn" class="btn">Register</a>
-        <button id="signinBtn" class="btn">Sign in</button>
-    </div>
+        <div class="actions">
+            <a href="/register" id="registerBtn" class="btn">Register</a>
+            <button type="submit" id="signinBtn" class="btn">Sign in</button>
+        </div>
 
-    {% if error %}
-        <p class="message error">{{ error }}</p>
-    {% endif %}
+        {% if error %}
+            <p class="message error">{{ error }}</p>
+        {% endif %}
 
-    <p id="message" class="message"></p>
-
-    <a id="joinBtn" class="join-link" href="#">Have a code? Join an event →</a>
+        <p id="message" class="message"></p>
+    </form>
 </div>
 {% endblock %}
 
