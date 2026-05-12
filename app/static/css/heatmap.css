@@ -360,3 +360,23 @@ body {
   color: var(--brown-mid);
   font-style: italic;
 }
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .heatmap-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .heatmap-grid {
+        min-width: 600px;
+    }
+
+    .btn {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
