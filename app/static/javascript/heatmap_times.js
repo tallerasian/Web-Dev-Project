@@ -24,6 +24,7 @@ const peopleData = {}; // key -> string[]
 
 let participantCount    = 0;
 let userIsParticipant  = false;
+let myView             = false;
 
 const HEAT_STOPS = [
   [250, 240, 220], // #FAF0DC — 0 people
@@ -36,7 +37,7 @@ const HEAT_STOPS = [
 
 function heatColor(count, total) {
   if (!count || !total) return '#FAF0DC';
-  const t      = Math.min(count / total, 1) * (HEAT_STOPS.length - 1);
+  const t      = (count / (total + 4)) * (HEAT_STOPS.length - 1);
   const lo     = Math.floor(t);
   const hi     = Math.min(lo + 1, HEAT_STOPS.length - 1);
   const frac   = t - lo;
@@ -140,15 +141,46 @@ function applyCell(el) {
   if (participantCount !== prevParticipantCount) {
     render(); // all cell ratios shift — full re-render
   } else {
-    const bg = heatColor(groupData[k] || 0, participantCount);
+    const bg = myView
+      ? (myData[k] ? '#F0BC45' : '#FAF0DC')
+      : heatColor(groupData[k] || 0, participantCount);
     el.className = `cell${myData[k] ? ' mine' : ''}`;
     el.style.background = bg;
   }
   updatePopular();
 }
 
+function clearAll() {
+  const keys = Object.keys(myData);
+  if (!keys.length) return;
+
+  for (const k of keys) {
+    groupData[k]  = myPrev[k] ?? Math.max(0, (groupData[k] || 0) - 1);
+    delete myPrev[k];
+    peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
+    delete myData[k];
+  }
+
+  if (userIsParticipant) {
+    participantCount--;
+    userIsParticipant = false;
+  }
+
+  render();
+  updatePopular();
+  saveAvailability();
+}
+
+function toggleMyPicks() {
+  myView = !myView;
+  document.getElementById('btn-my-picks').classList.toggle('active', myView);
+  render();
+}
+
 function cellClass(k) {
-  const bg = heatColor(groupData[k] || 0, participantCount);
+  const bg = myView
+    ? (myData[k] ? '#F0BC45' : '#FAF0DC')
+    : heatColor(groupData[k] || 0, participantCount);
   return { cls: `cell${myData[k] ? ' mine' : ''}`, bg };
 }
 

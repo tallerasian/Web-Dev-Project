@@ -28,6 +28,7 @@ const peopleData = {}; // key -> string[]
 
 let participantCount   = 0;
 let userIsParticipant  = false;
+let myView             = false;
 
 const HEAT_STOPS = [
   [250, 240, 220], // #FAF0DC — 0 people
@@ -40,7 +41,7 @@ const HEAT_STOPS = [
 
 function heatColor(count, total) {
   if (!count || !total) return '#FAF0DC';
-  const t      = Math.min(count / total, 1) * (HEAT_STOPS.length - 1);
+  const t      = (count / (total + 4)) * (HEAT_STOPS.length - 1);
   const lo     = Math.floor(t);
   const hi     = Math.min(lo + 1, HEAT_STOPS.length - 1);
   const frac   = t - lo;
@@ -123,6 +124,33 @@ function toggleDay(el) {
   updatePopular();
   saveAvailability();
 }
+// Toggle between heat view and "my picks" view
+function toggleMyPicks() {
+  myView = !myView;
+  document.getElementById('btn-my-picks').classList.toggle('active', myView);
+  render();
+}
+
+// Clear all selections for this user
+function clearAll() {
+  const keys = Object.keys(myData);
+  if (!keys.length) return;
+  // Decrement group counts and remove user from people data for all currently selected days
+  for (const k of keys) {
+    groupData[k]  = Math.max(0, (groupData[k] || 0) - 1);
+    peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
+    delete myData[k];
+  }
+  // Update participant count and flag
+  if (userIsParticipant) {
+    participantCount--;
+    userIsParticipant = false;
+  }
+  // Re-render and save changes
+  render();
+  updatePopular();
+  saveAvailability();
+}
 
 function render() {
   const container = document.getElementById('calendar');
@@ -152,8 +180,10 @@ function render() {
     const k       = dateKey(viewYear, viewMonth, d);
     const inRange = isInRange(viewYear, viewMonth, d);
     const count   = groupData[k] || 0;
-    const bg      = heatColor(count, participantCount);
-    const textColor = participantCount && count / participantCount > 0.5 ? 'white' : '';
+    const bg        = myView
+      ? (myData[k] ? '#F0BC45' : '#FAF0DC')
+      : heatColor(count, participantCount);
+    const textColor = !myView && participantCount && count / participantCount > 0.5 ? 'white' : '';
     const classes = [
       'day',
       inRange       ? 'in-range'     : 'out-of-range',

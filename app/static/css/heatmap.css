@@ -135,6 +135,57 @@ body {
 }
 
 /* ─────────────────────────────────────────
+   GRID TOOLBAR  (clear all)
+───────────────────────────────────────── */
+.grid-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.my-picks-btn {
+  background: none;
+  border: 1.5px solid var(--brown-mid);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brown-mid);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.12s;
+}
+
+.my-picks-btn:hover,
+.my-picks-btn.active {
+  background: var(--brown-dark);
+  border-color: var(--brown-dark);
+  color: white;
+}
+
+.clear-all-btn {
+  background: none;
+  border: 1.5px solid var(--brown-mid);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brown-mid);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.12s;
+}
+
+.clear-all-btn:hover {
+  background: var(--brown-dark);
+  border-color: var(--brown-dark);
+  color: white;
+}
+
+/* ─────────────────────────────────────────
    HEATMAP-DAYS  —  month calendar grid
 ───────────────────────────────────────── */
 .month-nav {
@@ -240,6 +291,7 @@ body {
 ───────────────────────────────────────── */
 .heat-0 { background: var(--heat-0); }
 
+
 /* ─────────────────────────────────────────
    SIDE PANELS  (both pages)
 ───────────────────────────────────────── */
@@ -297,6 +349,7 @@ body {
 
 .copy-btn {
   display: block;
+  width: 100%;
   text-align: center;
   text-decoration: none;
   background: none;
