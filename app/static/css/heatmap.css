@@ -465,4 +465,13 @@ body {
     border-radius: 12px;
     box-sizing: border-box;
   }
+
+  .code-card h2,
+  .view-code-card h2,
+  .popular-card h2,
+  .most-popular-card h2,
+  .event-info-card h2 {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
 }
