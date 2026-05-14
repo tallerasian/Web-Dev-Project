@@ -464,6 +464,7 @@ body {
     line-height: 1.4;
     border-radius: 12px;
     box-sizing: border-box;
+    text-align: left;
   }
 
   .code-card h2,
