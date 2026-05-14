@@ -279,7 +279,8 @@ def get_availability(event_id):
         else:
             bucket.append(display)
 
-    return jsonify(my_slots=my_slots, group_data=group_data, people_data=people_data)
+    participant_count = len({r.user_id for r in rows})
+    return jsonify(my_slots=my_slots, group_data=group_data, people_data=people_data, participant_count=participant_count)
 
 
 @flask_app.route("/event/<int:event_id>/availability", methods=["POST"])

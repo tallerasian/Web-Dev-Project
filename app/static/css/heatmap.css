@@ -16,6 +16,15 @@
   --heat-4: #c06010;
   --heat-5: #9a3a00;
 
+  /* heat scale — stops used by JS for dynamic interpolation */
+  --heat-0: #FAF0DC;
+  --heat-1: #F5D88A;
+  --heat-2: #F0BC45;
+  --heat-3: #E09020;
+  --heat-4: #C06010;
+  --heat-5: #9A3A00;
+
+
   --font: "Courier Prime", monospace;
   --radius: 12px;
   --radius-sm: 8px;
@@ -136,6 +145,57 @@ body {
   padding: 24px;
   width: 100%;
   max-width: 860px;
+}
+
+/* ─────────────────────────────────────────
+   GRID TOOLBAR  (clear all)
+───────────────────────────────────────── */
+.grid-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.my-picks-btn {
+  background: none;
+  border: 1.5px solid var(--brown-mid);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brown-mid);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.12s;
+}
+
+.my-picks-btn:hover,
+.my-picks-btn.active {
+  background: var(--brown-dark);
+  border-color: var(--brown-dark);
+  color: white;
+}
+
+.clear-all-btn {
+  background: none;
+  border: 1.5px solid var(--brown-mid);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brown-mid);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.12s;
+}
+
+.clear-all-btn:hover {
+  background: var(--brown-dark);
+  border-color: var(--brown-dark);
+  color: white;
 }
 
 /* ─────────────────────────────────────────
@@ -285,6 +345,9 @@ body {
   color: white;
 }
 
+.heat-0 { background: var(--heat-0); }
+
+
 /* ─────────────────────────────────────────
    SIDE PANELS  (both pages)
 ───────────────────────────────────────── */
@@ -342,6 +405,7 @@ body {
 
 .copy-btn {
   display: block;
+  width: 100%;
   text-align: center;
   text-decoration: none;
   background: none;

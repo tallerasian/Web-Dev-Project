@@ -22,12 +22,42 @@ const groupData  = {};
 const myData     = {};
 const peopleData = {}; // key -> string[]
 
+let participantCount    = 0;
+let userIsParticipant  = false;
+let myView             = false;
+
+const HEAT_STOPS = [
+  [250, 240, 220], // #FAF0DC — 0 people
+  [245, 216, 138], // #F5D88A
+  [240, 188,  69], // #F0BC45
+  [224, 144,  32], // #E09020
+  [192,  96,  16], // #C06010
+  [154,  58,   0], // #9A3A00 — all people
+];
+
+function heatColor(count, total) {
+  if (!count || !total) return '#FAF0DC';
+  const t      = (count / (total + 4)) * (HEAT_STOPS.length - 1);
+  const lo     = Math.floor(t);
+  const hi     = Math.min(lo + 1, HEAT_STOPS.length - 1);
+  const frac   = t - lo;
+  const [r1, g1, b1] = HEAT_STOPS[lo];
+  const [r2, g2, b2] = HEAT_STOPS[hi];
+  return `rgb(${Math.round(r1+(r2-r1)*frac)},${Math.round(g1+(g2-g1)*frac)},${Math.round(b1+(b2-b1)*frac)})`;
+}
+
 async function loadAvailability() {
   if (!EVENT_ID) return;
   const res  = await fetch(`/event/${EVENT_ID}/availability`);
   const data = await res.json();
+  participantCount   = data.participant_count || 0;
+  userIsParticipant  = data.my_slots.length > 0;
+  if (!userIsParticipant) {
+    participantCount++;   // pre-count this user so first click doesn't rescale all colours
+    userIsParticipant = true;
+  }
   for (const key of data.my_slots)                        myData[key]    = true;
-  for (const [k, v] of Object.entries(data.group_data))  groupData[k]   = Math.min(v, 5);
+  for (const [k, v] of Object.entries(data.group_data))  groupData[k]   = v;
   for (const [k, v] of Object.entries(data.people_data)) peopleData[k]  = v;
   render();
   updatePopular();
@@ -73,6 +103,8 @@ function applyCell(el) {
   const k = el.dataset.key;
   if (!k) return;
 
+  const prevParticipantCount = participantCount;
+
   if (dragMode === 'add') {
     if (myData[k]) {
       // deselect — restore to exactly what it was before
@@ -80,11 +112,19 @@ function applyCell(el) {
       delete myData[k];
       delete myPrev[k];
       peopleData[k]  = (peopleData[k] || []).filter(n => n !== 'You');
+      if (userIsParticipant && Object.keys(myData).length === 0) {
+        participantCount--;
+        userIsParticipant = false;
+      }
     } else {
       myPrev[k]      = groupData[k] || 0;
       myData[k]      = true;
-      groupData[k]   = Math.min(5, (groupData[k] || 0) + 1);
+      groupData[k]   = (groupData[k] || 0) + 1;
       peopleData[k]  = ['You', ...(peopleData[k] || [])];
+      if (!userIsParticipant) {
+        participantCount++;
+        userIsParticipant = true;
+      }
     }
   } else {
     if (!myData[k]) return;
@@ -92,15 +132,56 @@ function applyCell(el) {
     delete myData[k];
     delete myPrev[k];
     peopleData[k]  = (peopleData[k] || []).filter(n => n !== 'You');
+    if (userIsParticipant && Object.keys(myData).length === 0) {
+      participantCount--;
+      userIsParticipant = false;
+    }
   }
 
-  el.className = cellClass(k);
+  if (participantCount !== prevParticipantCount) {
+    render(); // all cell ratios shift — full re-render
+  } else {
+    const bg = myView
+      ? (myData[k] ? '#F0BC45' : '#FAF0DC')
+      : heatColor(groupData[k] || 0, participantCount);
+    el.className = `cell${myData[k] ? ' mine' : ''}`;
+    el.style.background = bg;
+  }
   updatePopular();
 }
 
+function clearAll() {
+  const keys = Object.keys(myData);
+  if (!keys.length) return;
+
+  for (const k of keys) {
+    groupData[k]  = myPrev[k] ?? Math.max(0, (groupData[k] || 0) - 1);
+    delete myPrev[k];
+    peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
+    delete myData[k];
+  }
+
+  if (userIsParticipant) {
+    participantCount--;
+    userIsParticipant = false;
+  }
+
+  render();
+  updatePopular();
+  saveAvailability();
+}
+
+function toggleMyPicks() {
+  myView = !myView;
+  document.getElementById('btn-my-picks').classList.toggle('active', myView);
+  render();
+}
+
 function cellClass(k) {
-  const level = groupData[k] || 0;
-  return ['cell', `heat-${level}`, myData[k] ? 'mine' : ''].filter(Boolean).join(' ');
+  const bg = myView
+    ? (myData[k] ? '#F0BC45' : '#FAF0DC')
+    : heatColor(groupData[k] || 0, participantCount);
+  return { cls: `cell${myData[k] ? ' mine' : ''}`, bg };
 }
 
 function setMode(mode) {
@@ -127,7 +208,8 @@ function render() {
     html += `<div class="time-label">${slotLabel(s)}</div>`;
     ACTIVE_DAYS.forEach(d => {
       const k = slotKey(d, s);
-      html += `<div class="${cellClass(k)}" data-key="${k}"></div>`;
+      const { cls, bg } = cellClass(k);
+      html += `<div class="${cls}" style="background:${bg}" data-key="${k}"></div>`;
     });
   }
 

@@ -214,6 +214,22 @@ body.home-page {
   letter-spacing: 0.02em;
 }
 
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-username {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brown-dark, #3D2B00);
+  background: rgba(61, 43, 0, 0.08);
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+
 .logout-btn {
   background: #c0392b;
   border: none;
