@@ -462,5 +462,6 @@ body {
     overflow-wrap: break-word;
     font-size: 0.95rem;
     line-height: 1.4;
+    border-radius: 12px;
   }
 }
