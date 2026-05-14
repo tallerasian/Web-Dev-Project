@@ -398,6 +398,10 @@ body {
 }
 
 @media (max-width: 600px) {
+  body {
+    overflow-x: hidden;
+  }
+
   .content,
   .main-content,
   .heatmap-content,
@@ -407,6 +411,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .page-wrap,
+  .main-wrap,
+  .heatmap-page {
     width: 100%;
     max-width: 100%;
   }
