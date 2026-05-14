@@ -1125,8 +1125,17 @@ body.code-page .btn-primary:hover {
     height: auto;
   }
 
+  body.create-event-page {
+    overflow-x: hidden;
+  }
+
   .login-container {
     width: 100%;
+  }
+
+  .create-wrap {
+    width: 100%;
+    max-width: 100%;
   }
 
   .actions {
@@ -1135,7 +1144,13 @@ body.code-page .btn-primary:hover {
   }
 
   .home-nav-tabs {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .nav-tab {
+    font-size: 0.75rem;
+    padding: 8px 10px;
   }
 
   .event-card {
