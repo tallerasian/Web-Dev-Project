@@ -1,22 +1,22 @@
 :root {
-  --bg:          #F0A500;
-  --bg-orange:   #ffa309;
-  --brown-dark:  #3D2B00;
-  --brown-mid:   #7A5C00;
-  --card:        #FAF0DC;
-  --card-dark:   #E8D5A3;
-  --white-soft:  #FFFDF5;
-  --brown-btn:   #2C1A00;
+  --bg: #f0a500;
+  --bg-orange: #ffa309;
+  --brown-dark: #3d2b00;
+  --brown-mid: #7a5c00;
+  --card: #faf0dc;
+  --card-dark: #e8d5a3;
+  --white-soft: #fffdf5;
+  --brown-btn: #2c1a00;
 
   /* heat scale */
-  --heat-0: #FAF0DC;
-  --heat-1: #F5D88A;
-  --heat-2: #F0BC45;
-  --heat-3: #E09020;
-  --heat-4: #C06010;
-  --heat-5: #9A3A00;
+  --heat-0: #faf0dc;
+  --heat-1: #f5d88a;
+  --heat-2: #f0bc45;
+  --heat-3: #e09020;
+  --heat-4: #c06010;
+  --heat-5: #9a3a00;
 
-  --font: 'Courier Prime', monospace;
+  --font: "Courier Prime", monospace;
   --radius: 12px;
   --radius-sm: 8px;
 }
@@ -24,7 +24,11 @@
 /* ─────────────────────────────────────────
    RESET / BASE
 ───────────────────────────────────────── */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: var(--font);
@@ -158,7 +162,9 @@ body {
   justify-content: center;
 }
 
-.month-nav button:hover { background: var(--card-dark); }
+.month-nav button:hover {
+  background: var(--card-dark);
+}
 
 .month-nav span {
   font-size: 18px;
@@ -192,10 +198,22 @@ body {
   color: var(--brown-dark);
 }
 
-.day.empty       { background: transparent; pointer-events: none; border: none; }
-.day.out-of-range { opacity: 0.2; cursor: not-allowed; pointer-events: none; }
-.day.today       { box-shadow: 0 0 0 2px #000000; }
-.day:hover:not(.empty):not(.out-of-range) { filter: brightness(0.9); }
+.day.empty {
+  background: transparent;
+  pointer-events: none;
+  border: none;
+}
+.day.out-of-range {
+  opacity: 0.2;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.day.today {
+  box-shadow: 0 0 0 2px #000000;
+}
+.day:hover:not(.empty):not(.out-of-range) {
+  filter: brightness(0.9);
+}
 
 /* ─────────────────────────────────────────
    HEATMAP-TIMES  —  time-slot grid
@@ -206,7 +224,9 @@ body {
   user-select: none;
 }
 
-.corner      { height: 28px; }
+.corner {
+  height: 28px;
+}
 
 .day-header {
   text-align: center;
@@ -233,21 +253,37 @@ body {
   cursor: pointer;
 }
 
-.cell:hover  { filter: brightness(0.85); }
+.cell:hover {
+  filter: brightness(0.85);
+}
 
 /* ─────────────────────────────────────────
    HEAT SCALE  (shared by both pages)
 ───────────────────────────────────────── */
-.heat-0 { background: var(--heat-0); }
-.heat-1 { background: var(--heat-1); }
-.heat-2 { background: var(--heat-2); }
-.heat-3 { background: var(--heat-3); }
-.heat-4 { background: var(--heat-4); }
-.heat-5 { background: var(--heat-5); }
+.heat-0 {
+  background: var(--heat-0);
+}
+.heat-1 {
+  background: var(--heat-1);
+}
+.heat-2 {
+  background: var(--heat-2);
+}
+.heat-3 {
+  background: var(--heat-3);
+}
+.heat-4 {
+  background: var(--heat-4);
+}
+.heat-5 {
+  background: var(--heat-5);
+}
 
 .heat-3,
 .heat-4,
-.heat-5 { color: white; }
+.heat-5 {
+  color: white;
+}
 
 /* ─────────────────────────────────────────
    SIDE PANELS  (both pages)
@@ -362,21 +398,43 @@ body {
 }
 
 @media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
+  .content,
+  .main-content,
+  .heatmap-content,
+  .heatmap-layout,
+  .availability-layout,
+  .event-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 100%;
+  }
 
-    .heatmap-container {
-        width: 100%;
-        overflow-x: auto;
-    }
+  .calendar-card,
+  .calendar-panel,
+  .heatmap-card {
+    width: 100%;
+    max-width: 100%;
+  }
 
-    .heatmap-grid {
-        min-width: 600px;
-    }
+  .side-panel,
+  .info-panel,
+  .event-sidebar,
+  .summary-panel {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
 
-    .btn {
-        font-size: 16px;
-        padding: 10px;
-    }
+  .code-card,
+  .view-code-card,
+  .popular-card,
+  .most-popular-card,
+  .event-info-card {
+    width: 100%;
+    max-width: 100%;
+  }
 }
