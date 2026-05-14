@@ -26,12 +26,41 @@ const groupData  = {};
 const myData     = {};
 const peopleData = {}; // key -> string[]
 
+let participantCount   = 0;
+let userIsParticipant  = false;
+
+const HEAT_STOPS = [
+  [250, 240, 220], // #FAF0DC — 0 people
+  [245, 216, 138], // #F5D88A
+  [240, 188,  69], // #F0BC45
+  [224, 144,  32], // #E09020
+  [192,  96,  16], // #C06010
+  [154,  58,   0], // #9A3A00 — all people
+];
+
+function heatColor(count, total) {
+  if (!count || !total) return '#FAF0DC';
+  const t      = Math.min(count / total, 1) * (HEAT_STOPS.length - 1);
+  const lo     = Math.floor(t);
+  const hi     = Math.min(lo + 1, HEAT_STOPS.length - 1);
+  const frac   = t - lo;
+  const [r1, g1, b1] = HEAT_STOPS[lo];
+  const [r2, g2, b2] = HEAT_STOPS[hi];
+  return `rgb(${Math.round(r1+(r2-r1)*frac)},${Math.round(g1+(g2-g1)*frac)},${Math.round(b1+(b2-b1)*frac)})`;
+}
+
 async function loadAvailability() {
   if (!EVENT_ID) return;
   const res  = await fetch(`/event/${EVENT_ID}/availability`);
   const data = await res.json();
+  participantCount  = data.participant_count || 0;
+  userIsParticipant = data.my_slots.length > 0;
+  if (!userIsParticipant) {
+    participantCount++;   // pre-count this user so first click doesn't rescale all colours
+    userIsParticipant = true;
+  }
   for (const key of data.my_slots)                        myData[key]    = true;
-  for (const [k, v] of Object.entries(data.group_data))  groupData[k]   = Math.min(v, 5);
+  for (const [k, v] of Object.entries(data.group_data))  groupData[k]   = v;
   for (const [k, v] of Object.entries(data.people_data)) peopleData[k]  = v;
   render();
   updatePopular();
@@ -76,10 +105,18 @@ function toggleDay(el) {
     delete myData[k];
     groupData[k] = Math.max(0, (groupData[k] || 0) - 1);
     peopleData[k] = (peopleData[k] || []).filter(n => n !== 'You');
+    if (userIsParticipant && Object.keys(myData).length === 0) {
+      participantCount--;
+      userIsParticipant = false;
+    }
   } else {
     myData[k]    = true;
-    groupData[k] = Math.min(5, (groupData[k] || 0) + 1);
+    groupData[k] = (groupData[k] || 0) + 1;
     peopleData[k] = ['You', ...(peopleData[k] || [])];
+    if (!userIsParticipant) {
+      participantCount++;
+      userIsParticipant = true;
+    }
   }
 
   render();
@@ -114,16 +151,17 @@ function render() {
   for (let d = 1; d <= daysInMonth; d++) {
     const k       = dateKey(viewYear, viewMonth, d);
     const inRange = isInRange(viewYear, viewMonth, d);
-    const level   = groupData[k] || 0;
+    const count   = groupData[k] || 0;
+    const bg      = heatColor(count, participantCount);
+    const textColor = participantCount && count / participantCount > 0.5 ? 'white' : '';
     const classes = [
       'day',
-      `heat-${level}`,
       inRange       ? 'in-range'     : 'out-of-range',
       myData[k]     ? 'mine'         : '',
       k === todayKey ? 'today'       : ''
     ].filter(Boolean).join(' ');
 
-    html += `<div class="${classes}" data-key="${k}" data-inrange="${inRange}" onclick="toggleDay(this)">${d}</div>`;
+    html += `<div class="${classes}" style="background:${bg};color:${textColor}" data-key="${k}" data-inrange="${inRange}" onclick="toggleDay(this)">${d}</div>`;
   }
 
   html += `</div>`;

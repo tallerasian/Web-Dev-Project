@@ -8,7 +8,7 @@
   --white-soft:  #FFFDF5;
   --brown-btn:   #2C1A00;
 
-  /* heat scale */
+  /* heat scale — stops used by JS for dynamic interpolation */
   --heat-0: #FAF0DC;
   --heat-1: #F5D88A;
   --heat-2: #F0BC45;
@@ -239,15 +239,6 @@ body {
    HEAT SCALE  (shared by both pages)
 ───────────────────────────────────────── */
 .heat-0 { background: var(--heat-0); }
-.heat-1 { background: var(--heat-1); }
-.heat-2 { background: var(--heat-2); }
-.heat-3 { background: var(--heat-3); }
-.heat-4 { background: var(--heat-4); }
-.heat-5 { background: var(--heat-5); }
-
-.heat-3,
-.heat-4,
-.heat-5 { color: white; }
 
 /* ─────────────────────────────────────────
    SIDE PANELS  (both pages)
