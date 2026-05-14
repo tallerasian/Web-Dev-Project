@@ -422,6 +422,12 @@ body {
     max-width: 100%;
   }
 
+  .heatmap-grid,
+  .calendar-grid {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .calendar-card,
   .calendar-panel,
   .heatmap-card {
