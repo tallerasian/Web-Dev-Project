@@ -415,7 +415,7 @@ body {
   .calendar-panel,
   .heatmap-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 460px;
     margin: 0 auto;
   }
 
@@ -424,7 +424,7 @@ body {
   .event-sidebar,
   .summary-panel {
     width: 100%;
-    max-width: 420px;
+    max-width: 480px;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -437,7 +437,7 @@ body {
   .most-popular-card,
   .event-info-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 480px;
     margin: 0 auto;
   }
 }
