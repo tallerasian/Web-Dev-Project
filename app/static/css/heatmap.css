@@ -441,7 +441,7 @@ body {
   .event-sidebar,
   .summary-panel {
     width: 100%;
-    max-width: 480px;
+    max-width: 95%;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -454,7 +454,7 @@ body {
   .most-popular-card,
   .event-info-card {
     width: 100%;
-    max-width: 480px;
+    max-width: 95%;
     margin: 0 auto;
     padding: 16px;
     word-wrap: break-word;
