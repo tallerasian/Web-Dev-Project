@@ -305,6 +305,7 @@ body {
   display: flex;
   align-items: flex-start;
   padding-top: 2px;
+  white-space: nowrap;
 }
 
 .cell {
@@ -464,6 +465,13 @@ body {
 @media (max-width: 600px) {
   body {
     overflow-x: hidden;
+  }
+
+  .content {
+    padding: 12px 8px 24px;
+  }
+  .calendar-card {
+    padding: 12px 8px;
   }
 
   .content,
