@@ -78,6 +78,16 @@ This may not work on certain networks (such as library or university Wi-Fi) that
 
 # Testing the Application
 
+To run the unit tests, execute the following in the terminal:
+
+    python -m unittest testing/unittests.py -v
+
+Results for each test will be printed onto the terminal. To run the system tests instead:
+
+    python -m unittest testing/systemtests.py -v
+
+---
+
 The following test procedures walk through all major features of Synced. To run them, ensure the application is already running at http://localhost:5000 (see *Launching the Application* above).
 
 For full coverage, open **two separate browser windows** (or use a private/incognito window alongside your main one) so you can simulate two different users.
