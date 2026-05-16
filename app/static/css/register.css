@@ -136,4 +136,10 @@ form {
     flex-direction: column;
     gap: 12px;
   }
+
+  .message {
+    display: block;
+    width: 100%;
+    min-height: 24px;
+  }
 }
