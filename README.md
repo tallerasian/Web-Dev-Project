@@ -48,7 +48,7 @@ In order to launch the application, a virtual environment with the necessary mod
 
 >Run application in dev environment.
 
-    flask --app app run
+    flask --app app/synced.py run
 
 The app can then be accessed from http://localhost:5000. 
 
@@ -60,7 +60,7 @@ Alternatively, the app can be hosted on LAN, where devices on the same network c
 
 >Run application for LAN
 
-    flask --app app run --host 0.0.0.0 --with-threads
+    flask --app app/synced.py run --host 0.0.0.0 --with-threads
 
 The flask app will log the URLs that it is serving on for localhost and LAN.
 

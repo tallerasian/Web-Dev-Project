@@ -1,4 +1,5 @@
-from app import flask_app, db
+from app import db
+from app.synced import flask_app
 from app.models import User, Event, EventMember, Availability
 from app.forms import LoginForm, RegisterForm
 from flask import render_template, redirect, url_for, request, abort, jsonify
