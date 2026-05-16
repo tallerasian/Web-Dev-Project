@@ -123,5 +123,6 @@ form {
   body.register-page {
     height: auto;
     min-height: 100vh;
+    padding: 20px;
   }
 }
