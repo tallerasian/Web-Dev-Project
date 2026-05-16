@@ -131,4 +131,9 @@ form {
     width: 100%;
     max-width: 100%;
   }
+
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+  }
 }
