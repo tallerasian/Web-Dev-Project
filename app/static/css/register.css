@@ -126,4 +126,9 @@ form {
     padding: 20px;
     align-items: flex-start;
   }
+
+  .login-container {
+    width: 100%;
+    max-width: 100%;
+  }
 }
