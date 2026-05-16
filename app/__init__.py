@@ -22,6 +22,9 @@ def create_app(config):
 
     with flask_app.app_context():
         db.create_all()
+
+    from app.blueprints import main
+    flask_app.register_blueprint(main)
     
     return flask_app
 

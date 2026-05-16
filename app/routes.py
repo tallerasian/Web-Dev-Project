@@ -1,5 +1,5 @@
 from app import db
-from app.synced import flask_app
+from app.blueprints import main
 from app.models import User, Event, EventMember, Availability
 from app.forms import LoginForm, RegisterForm
 from flask import render_template, redirect, url_for, request, abort, jsonify
@@ -8,24 +8,24 @@ from datetime import date, time
 import random
 import string
 
-@flask_app.route("/")
+@main.route("/")
 def index():
-    return redirect(url_for("login_page"))
+    return redirect(url_for("main.login_page"))
 
 
-@flask_app.route("/login", methods=["GET", "POST"])
+@main.route("/login", methods=["GET", "POST"])
 def login_page():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            return redirect(url_for("home_page"))
+            return redirect(url_for("main.home_page"))
         return render_template("login.html.jinja", form=form, error="Invalid username or password.")
     return render_template("login.html.jinja", form=form)
 
 
-@flask_app.route("/register", methods=["GET", "POST"])
+@main.route("/register", methods=["GET", "POST"])
 def register_page():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -43,35 +43,36 @@ def register_page():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for("login_page"))
+        return redirect(url_for("main.login_page"))
     return render_template("register.html.jinja", form=form)
 
 
-@flask_app.route("/logout")
+@main.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("login_page"))
+    return redirect(url_for("main.login_page"))
 
 
-@flask_app.route("/home")
+@main.route("/home")
 @login_required
 def home_page():
     # grab every event this user is part of (as organiser or member)
     memberships = EventMember.query.filter_by(user_id=current_user.id).all()
     events = [m.event for m in memberships]
     join_error = request.args.get("join_error")
-    return render_template("home.html.jinja", events=events, join_error=join_error)
+    create_event_url = url_for("main.create_event")
+    return render_template("home.html.jinja", events=events, join_error=join_error, create_event_url=create_event_url)
 
 
-@flask_app.route("/event")
+@main.route("/event")
 @login_required
 def create_event():
     return render_template("create_event.html.jinja")
 
 
 # still needed for the organiser's create flow (URL params, no DB event yet)
-@flask_app.route("/event/heatmap_times")
+@main.route("/event/heatmap_times")
 @login_required
 def heatmap_times():
     return render_template("heatmap_times.html.jinja", is_owner=True, event={
@@ -84,7 +85,7 @@ def heatmap_times():
     })
 
 
-@flask_app.route("/event/heatmap_days")
+@main.route("/event/heatmap_days")
 @login_required
 def heatmap_days():
     return render_template("heatmap_days.html.jinja", is_owner=True, event={
@@ -97,7 +98,7 @@ def heatmap_days():
 
 
 # heatmap route for events already in the DB (join flow + revisiting your own event)
-@flask_app.route("/event/<int:event_id>/heatmap")
+@main.route("/event/<int:event_id>/heatmap")
 @login_required
 def event_heatmap(event_id):
     event = Event.query.get_or_404(event_id)
@@ -137,7 +138,7 @@ def generate_event_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 
-@flask_app.route("/event/code")
+@main.route("/event/code")
 @login_required
 def event_code():
     # keep retrying until we land on a code that doesn't already exist
@@ -180,7 +181,7 @@ def event_code():
     return render_template("code.html.jinja", event=event, is_owner=True)
 
 
-@flask_app.route("/event/<int:event_id>/code")
+@main.route("/event/<int:event_id>/code")
 @login_required
 def event_view_code(event_id):
     event = Event.query.get_or_404(event_id)
@@ -190,7 +191,7 @@ def event_view_code(event_id):
     return render_template("code.html.jinja", event=event, is_owner=(event.organizer_id == current_user.id))
 
 
-@flask_app.route("/event/<int:event_id>/delete", methods=["POST"])
+@main.route("/event/<int:event_id>/delete", methods=["POST"])
 @login_required
 def delete_event(event_id):
     event = Event.query.get_or_404(event_id)
@@ -201,10 +202,10 @@ def delete_event(event_id):
 
     db.session.delete(event)  # cascade removes all EventMember rows too
     db.session.commit()
-    return redirect(url_for("home_page"))
+    return redirect(url_for("main.home_page"))
 
 
-@flask_app.route("/event/<int:event_id>/leave", methods=["POST"])
+@main.route("/event/<int:event_id>/leave", methods=["POST"])
 @login_required
 def leave_event(event_id):
     event = Event.query.get_or_404(event_id)
@@ -219,10 +220,10 @@ def leave_event(event_id):
 
     db.session.delete(membership)
     db.session.commit()
-    return redirect(url_for("home_page"))
+    return redirect(url_for("main.home_page"))
 
 
-@flask_app.route("/event/new", methods=["POST"])
+@main.route("/event/new", methods=["POST"])
 @login_required
 def create_event_post():
     name       = request.form.get("name", "My Event")
@@ -256,10 +257,10 @@ def create_event_post():
     db.session.flush()
     db.session.add(EventMember(event_id=event.id, user_id=current_user.id))
     db.session.commit()
-    return redirect(url_for("event_heatmap", event_id=event.id))
+    return redirect(url_for("main.event_heatmap", event_id=event.id))
 
 
-@flask_app.route("/event/<int:event_id>/availability", methods=["GET"])
+@main.route("/event/<int:event_id>/availability", methods=["GET"])
 @login_required
 def get_availability(event_id):
     if not EventMember.query.filter_by(event_id=event_id, user_id=current_user.id).first():
@@ -284,7 +285,7 @@ def get_availability(event_id):
     return jsonify(my_slots=my_slots, group_data=group_data, people_data=people_data, participant_count=participant_count)
 
 
-@flask_app.route("/event/<int:event_id>/availability", methods=["POST"])
+@main.route("/event/<int:event_id>/availability", methods=["POST"])
 @login_required
 def save_availability(event_id):
     if not EventMember.query.filter_by(event_id=event_id, user_id=current_user.id).first():
@@ -300,14 +301,14 @@ def save_availability(event_id):
     return jsonify(ok=True)
 
 
-@flask_app.route("/event/join", methods=["POST"])
+@main.route("/event/join", methods=["POST"])
 @login_required
 def join_event():
     code = request.form.get("code", "").strip().upper()
     event = Event.query.filter_by(code=code).first()
 
     if not event:
-        return redirect(url_for("home_page", join_error="Code not found. Double-check and try again."))
+        return redirect(url_for("main.home_page", join_error="Code not found. Double-check and try again."))
 
     # only insert a new membership if they're not already in
     already_member = EventMember.query.filter_by(
@@ -317,4 +318,4 @@ def join_event():
         db.session.add(EventMember(event_id=event.id, user_id=current_user.id))
         db.session.commit()
 
-    return redirect(url_for("event_heatmap", event_id=event.id))
+    return redirect(url_for("main.event_heatmap", event_id=event.id))
