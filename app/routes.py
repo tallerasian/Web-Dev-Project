@@ -130,7 +130,8 @@ def event_heatmap(event_id):
         }
         return render_template("heatmap_times.html.jinja",
                                event=event_data, is_owner=is_owner, event_id=event.id)
-
+    
+# generates a unique event code and creates the event in the DB
 @main.route("/event/code")
 @login_required
 def event_code():
@@ -201,6 +202,9 @@ def leave_event(event_id):
     return redirect(url_for("main.home_page"))
 
 
+# bridge between the create form (POST) and the heatmap preview pages (GET)
+# the event isn't saved to the DB yet — that only happens when the organiser
+# confirms and hits the "view code" button on the heatmap preview
 @main.route("/event/new", methods=["POST"])
 @login_required
 def create_event_post():
@@ -232,11 +236,16 @@ def get_availability(event_id):
     group_data  = {}
     people_data = {}
 
+    # pre-fetch all users in one query instead of hitting the DB per row
+    user_ids    = {r.user_id for r in rows}
+    users_by_id = {u.id: u for u in User.query.filter(User.id.in_(user_ids)).all()}
+
     for r in rows:
         group_data[r.slot_key] = group_data.get(r.slot_key, 0) + 1
-        user    = User.query.get(r.user_id)
+        user    = users_by_id.get(r.user_id)
         display = "You" if r.user_id == current_user.id else (user.first_name if user else "?")
         bucket  = people_data.setdefault(r.slot_key, [])
+        # always put "You" at the front so it's easy to spot
         if r.user_id == current_user.id:
             bucket.insert(0, "You")
         else:

@@ -370,11 +370,16 @@ body.home-page {
   font-weight: 700;
   color: #3a1a00;
   margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .event-card-sub {
   font-size: 0.8rem;
   color: #a07040;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .mini-calendar {
