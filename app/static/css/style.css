@@ -1226,12 +1226,6 @@ body.code-page .btn-primary:hover {
    REGISTER PAGE STYLES
 ============================================ */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body.register-page {
   min-height: 100vh;
   height: 100vh;
