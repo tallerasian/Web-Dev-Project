@@ -3,7 +3,8 @@ from app import create_app, db
 from app.config import TestConfig
 from app.models import User, Event, EventMember
 from app.functionality import add_user, add_event
-from multiprocessing import Process
+from threading import Thread
+from werkzeug.serving import make_server
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
@@ -18,7 +19,8 @@ class SeleniumTests(TestCase):
         self.app_context = self.test_app.app_context()
         self.app_context.push()
 
-        self.server_thread = Process(target = self.test_app.run)
+        self._server = make_server('127.0.0.1', 5000, self.test_app)
+        self.server_thread = Thread(target=self._server.serve_forever, daemon=True)
         self.server_thread.start()
 
         options = Options()
@@ -290,7 +292,7 @@ class SeleniumTests(TestCase):
         self.assertEqual(deleted_event, 0, "Failed to delete event")
 
     def tearDown(self):
-        self.server_thread.terminate()
+        self._server.shutdown()
         self.driver.close()
         db.drop_all()
         db.session.remove()
