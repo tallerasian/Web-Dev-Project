@@ -497,9 +497,12 @@ body {
   }
 
   .side-panel {
+    width: 100%;
+    max-width: 100%;
     background: var(--white-soft);
     border-radius: var(--radius);
     padding: 16px;
+    box-sizing: border-box;
   }
 
   .copy-btn {
