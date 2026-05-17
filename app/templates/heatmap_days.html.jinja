@@ -40,9 +40,9 @@
       <div class="side-panel">
         {% if is_owner %}
           {% if event_id %}
-            <a href="/event/{{ event_id }}/code" class="copy-btn">View Code →</a>
+            <a id="go-to-code" href="/event/{{ event_id }}/code" class="copy-btn">View Code →</a>
           {% else %}
-            <button class="copy-btn" onclick="goToInvite()">Next: Invite →</button>
+            <button id="go-to-code" class="copy-btn" onclick="goToInvite()">Next: Invite →</button>
           {% endif %}
         {% else %}
           <a href="/home" class="copy-btn">Done</a>
