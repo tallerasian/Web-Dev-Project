@@ -29,6 +29,14 @@
   --card: #faf0dc;
   --card-dark: #e8d5a3;
   --white-soft: #fffdf5;
+  --reg-black: #000000;
+  --brown-btn: #2c1a00;
+  --heat-0: #faf0dc;
+  --heat-1: #f5d88a;
+  --heat-2: #f0bc45;
+  --heat-3: #e09020;
+  --heat-4: #c06010;
+  --heat-5: #9a3a00;
   --font: "Courier Prime", "Courier New", Courier, monospace;
   --radius: 12px;
   --radius-sm: 8px;
@@ -1225,7 +1233,6 @@ body.code-page .btn-primary:hover {
 /* ============================================
    REGISTER PAGE STYLES
 ============================================ */
-
 body.register-page {
   min-height: 100vh;
   height: 100vh;
@@ -1240,14 +1247,14 @@ body.register-page {
   align-items: center;
 }
 
-.login-container {
+body.register-page .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 900px;
 }
 
-.logo {
+body.register-page .logo {
   font-size: 2.4rem;
   font-weight: 700;
   color: #fff;
@@ -1256,17 +1263,17 @@ body.register-page {
   font-family: "Courier New", Courier, monospace;
 }
 
-form {
+body.register-page form {
   width: 100%;
 }
 
-.form-row {
+body.register-page .form-row {
   display: flex;
   gap: 16px;
   margin-bottom: 12px;
 }
 
-.input-field {
+body.register-page .input-field {
   width: 100%;
   flex: 1;
   padding: 16px 20px;
@@ -1280,16 +1287,16 @@ form {
   transition: border-color 0.15s;
 }
 
-.input-field::placeholder {
+body.register-page .input-field::placeholder {
   color: var(--calender-orange);
   font-family: "Courier New", Courier, monospace;
 }
 
-.input-field:focus {
+body.register-page .input-field:focus {
   border-color: var(--calender-dark-orange);
 }
 
-.actions {
+body.register-page .actions {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -1298,11 +1305,11 @@ form {
   padding: 0 2px;
 }
 
-.center-action {
+body.register-page .center-action {
   justify-content: center;
 }
 
-.btn {
+body.register-page .btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -1315,11 +1322,11 @@ form {
   transition: color 0.15s;
 }
 
-.btn:hover {
+body.register-page .btn:hover {
   color: #ffffff;
 }
 
-.message {
+body.register-page .message {
   width: 100%;
   min-height: 1.4em;
   margin-top: 14px;
@@ -1338,17 +1345,17 @@ form {
     align-items: flex-start;
   }
 
-  .login-container {
+  body.register-page .login-container {
     width: 100%;
     max-width: 100%;
   }
 
-  .form-row {
+  body.register-page .form-row {
     flex-direction: column;
     gap: 12px;
   }
 
-  .message {
+  body.register-page .message {
     display: block;
     width: 100%;
     min-height: 24px;
@@ -1360,53 +1367,9 @@ form {
 /* ============================================
    HEATMAP PAGE STYLES
 ============================================ */
-:root {
-  --bg: #f0a500;
-  --bg-orange: #ffa309;
-  --brown-dark: #3d2b00;
-  --brown-mid: #7a5c00;
-  --card: #faf0dc;
-  --card-dark: #e8d5a3;
-  --white-soft: #fffdf5;
-  --brown-btn: #2c1a00;
-
-  /* heat scale */
-  --heat-0: #faf0dc;
-  --heat-1: #f5d88a;
-  --heat-2: #f0bc45;
-  --heat-3: #e09020;
-  --heat-4: #c06010;
-  --heat-5: #9a3a00;
-
-  /* heat scale — stops used by JS for dynamic interpolation */
-  --heat-0: #faf0dc;
-  --heat-1: #f5d88a;
-  --heat-2: #f0bc45;
-  --heat-3: #e09020;
-  --heat-4: #c06010;
-  --heat-5: #9a3a00;
-
-  --font: "Courier Prime", monospace;
-  --radius: 12px;
-  --radius-sm: 8px;
-}
-
 /* ─────────────────────────────────────────
    RESET / BASE
 ───────────────────────────────────────── */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: var(--font);
-  background: var(--bg-orange);
-  color: var(--brown-dark);
-  min-height: 100vh;
-}
-
 /* ─────────────────────────────────────────
    PAGE HEADER  (both pages)
 ───────────────────────────────────────── */
