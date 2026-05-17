@@ -17,6 +17,8 @@ def add_user(username, email, first_name, last_name, password):
     db.session.add(user)
     db.session.commit()
 
+    return user.id
+
 def generate_event_code():
     """Generates a 6-character code unique to the database"""
     code = ''

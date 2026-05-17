@@ -30,6 +30,7 @@ class BasicTests(TestCase):
         self.assertNotEqual(encrypted, new_encrypted, "Password salting has failed")
 
     def test_adding_users(self):
+        """Test adding users to the database"""
         for i in range(20):
             test_name = f"testname{i}"
             add_user(
@@ -44,6 +45,7 @@ class BasicTests(TestCase):
         self.assertEqual(users, 20, f"Expected 20 users in the database, instead got {users}")
     
     def test_adding_events(self):
+        """Test adding events to the database"""
         add_user(
             "organiser",
             "org@example.com",
