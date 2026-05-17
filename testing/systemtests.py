@@ -1,7 +1,7 @@
 from unittest import TestCase
 from app import create_app, db
 from app.config import TestConfig
-from app.models import User
+from app.models import User, Event
 from app.functionality import add_user
 from multiprocessing import Process
 from selenium import webdriver
@@ -113,10 +113,60 @@ class SeleniumTests(TestCase):
         code_button.click()
 
         self.assertIn("code", self.driver.current_url, "Failed to reach event code page")
+
         
+    def test_weekly_event_creation(self):
+        """Test creating an event that occurs weekly"""
+        add_user("AllAsAlice100", "alice.ann@student.uni.edu", "Alice", "Ann", "SuperSecurePassword123")
+
+        login_username = self.driver.find_element(By.ID, "username")
+        login_password = self.driver.find_element(By.ID, "password")
+        signin_button = self.driver.find_element(By.ID, "signinBtn")
+
+        login_username.clear()
+        login_username.send_keys("AllAsAlice100")
+        login_password.clear()
+        login_password.send_keys("SuperSecurePassword123")
+        signin_button.click()
+
+        self.assertEqual(self.driver.current_url, localhost + "/home", "Failed to reach home page after logging in")
+
+        create_event_button = self.driver.find_element(By.ID, "create-event-button")
+        create_event_button.click()
+
+        self.assertEqual(self.driver.current_url, localhost + "/event", "Failed to reach create event page")
+
+        days_of_week_button = self.driver.find_element(By.ID, "tab-week")
+        days_of_week_button.click()
+
+        week_day_buttons = self.driver.find_elements(By.CLASS_NAME, "week-day-cell")
+        for day in week_day_buttons:
+            day.click()
+
+        event_name_field = self.driver.find_element(By.ID, "event-name")
+        event_location_field = self.driver.find_element(By.ID, "event-location")
+        event_details_field = self.driver.find_element(By.ID, "event-details")
+
+        fields = [event_name_field, event_location_field, event_details_field]
+        inputs = ["Weekly Meetup", "Bob's House", "Snacks are included"]
+        for field, input in zip(fields, inputs):
+            field.clear()
+            field.send_keys(input)
+
+        submit_button = self.driver.find_element(By.ID, "next-btn")
+        submit_button.click()
+
+        self.assertIn(localhost + "/event/heatmap_times", self.driver.current_url, "Failed to reach event heatmap page")
+        
+        code_button = self.driver.find_element(By.ID, "go-to-code")
+        code_button.click()
+
+        self.assertIn("code", self.driver.current_url, "Failed to reach event code page")
+
+
     def tearDown(self):
         self.server_thread.terminate()
         self.driver.close()
-        db.session.remove()
         db.drop_all()
+        db.session.remove()
         self.app_context.pop()
