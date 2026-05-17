@@ -79,7 +79,7 @@
                         {% if join_error %}
                             <div class="join-feedback error">{{ join_error }}</div>
                         {% endif %}
-                        <button type="submit" class="btn-primary">Join Event</button>
+                        <button id="join-event-button" type="submit" class="btn-primary">Join Event</button>
                     </form>
                 </div>
             </div>
@@ -87,9 +87,8 @@
         </div>
 
         <!-- BOTTOM ACTIONS -->
-        {% set create_event_url = url_for('create_event') %}
         <div class="bottom-actions">
-            <button class="btn-primary" onclick="window.location.href='{{ create_event_url }}'">Create New Event +</button>
+            <button id="create-event-button" class="btn-primary" onclick="window.location.href='{{ create_event_url }}'">Create New Event +</button>
         </div>
 
 </div>
