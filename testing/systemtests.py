@@ -2,9 +2,9 @@ from unittest import TestCase
 from app import create_app, db
 from app.config import TestConfig
 from app.models import User
+from app.functionality import add_user
 from multiprocessing import Process
 from selenium import webdriver
-
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.by import By
@@ -21,10 +21,11 @@ class SeleniumTests(TestCase):
         self.server_thread.start()
 
         self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(1)
+        self.driver.implicitly_wait(5)
         self.driver.get(localhost)
 
     def test_user_registration(self):
+        """Test registering a new account and logging in with said account"""
         register_button = self.driver.find_element(By.ID, "registerBtn")
         register_button.click()
 
@@ -43,7 +44,7 @@ class SeleniumTests(TestCase):
             field.clear()
             field.send_keys(input)
         
-        submit_button = self.driver.find_element(By.CLASS_NAME, "btn")
+        submit_button = self.driver.find_element(By.ID, "submit-btn")
         submit_button.click()
 
         self.assertEqual(self.driver.current_url, localhost + "/login", "Did not return to login page after registering.")
@@ -61,7 +62,57 @@ class SeleniumTests(TestCase):
         self.assertIsNotNone(User.query.filter_by(username = "Baubles123").first(), "Failed to store user in database")
         self.assertEqual(self.driver.current_url, localhost + "/home", "Failed to reach home page after logging in")
         
+    def test_day_event_creation(self):
+        """Test creating an event for a specific day"""
+        add_user("AllAsAlice100", "alice.ann@student.uni.edu", "Alice", "Ann", "SuperSecurePassword123")
 
+        login_username = self.driver.find_element(By.ID, "username")
+        login_password = self.driver.find_element(By.ID, "password")
+        signin_button = self.driver.find_element(By.ID, "signinBtn")
+
+        login_username.clear()
+        login_username.send_keys("AllAsAlice100")
+        login_password.clear()
+        login_password.send_keys("SuperSecurePassword123")
+        signin_button.click()
+
+        self.assertEqual(self.driver.current_url, localhost + "/home", "Failed to reach home page after logging in")
+
+        create_event_button = self.driver.find_element(By.ID, "create-event-button")
+        create_event_button.click()
+
+        self.assertEqual(self.driver.current_url, localhost + "/event", "Failed to reach create event page")
+
+        specific_days_button = self.driver.find_element(By.ID, "tab-days")
+        specific_days_button.click()
+
+        date_from_field = self.driver.find_element(By.ID, "date-from")
+        date_to_field = self.driver.find_element(By.ID, "date-to")
+        event_name_field = self.driver.find_element(By.ID, "event-name")
+        event_location_field = self.driver.find_element(By.ID, "event-location")
+        event_details_field = self.driver.find_element(By.ID, "event-details")
+
+        fields = [date_from_field, date_to_field, event_name_field, event_location_field, event_details_field]
+        inputs = ["2026-05-01", "2026-05-31", "Study Group Meetup", "Room 1000", "Bring your chargers!!!"]
+        for field, input in zip(fields, inputs):
+            field.clear()
+            field.send_keys(input)
+
+        submit_button = self.driver.find_element(By.ID, "next-btn")
+        submit_button.click()
+
+        self.assertIn(localhost + "/event/heatmap_days", self.driver.current_url, "Failed to reach event heatmap page")
+
+        number_of_day_buttons = len(self.driver.find_elements(By.CLASS_NAME, "in-range"))
+        self.assertEqual(number_of_day_buttons, 31, f"Expected 31 selectable day buttons, but instead got {number_of_day_buttons}")
+        for i in range(31):
+            day_buttons = self.driver.find_elements(By.CLASS_NAME, "in-range")
+            day_buttons[i].click()
+
+        code_button = self.driver.find_element(By.ID, "go-to-code")
+        code_button.click()
+
+        self.assertIn("code", self.driver.current_url, "Failed to reach event code page")
         
     def tearDown(self):
         self.server_thread.terminate()
