@@ -46,6 +46,16 @@ function selectType(type) {
 
 // ── MINI CALENDAR ────────────────────────────
 
+// Parse date string in YYYY-MM-DD format as local date 
+function parseDateLocal(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+// Format date as YYYY-MM-DD for input values and data attributes
+function fmtDateLocal(y, m, d) {
+  return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
+
 function changeCalMonth(dir) {
   calMonth += dir;
   if (calMonth > 11) { calMonth = 0; calYear++; }
@@ -79,7 +89,7 @@ function renderCalendar() {
       calYear  === today.getFullYear()
     );
     const classes = buildDayClasses(dt, isToday);
-    html += `<div class="${classes}" data-date="${dt.toISOString().split('T')[0]}" onclick="calDayClick(this)">${d}</div>`;
+    html += `<div class="${classes}" data-date="${fmtDateLocal(calYear, calMonth, d)}" onclick="calDayClick(this)">${d}</div>`;
   }
   grid.innerHTML = html;
 }
@@ -89,13 +99,13 @@ function buildDayClasses(dt, isToday) {
   if (isToday) classes.push('today');
 
   if (rangeFrom && rangeTo) {
-    const from = new Date(rangeFrom);
-    const to   = new Date(rangeTo);
+    const from = parseDateLocal(rangeFrom);
+    const to   = parseDateLocal(rangeTo);
     if (dt.getTime() === from.getTime()) classes.push('range-start');
     else if (dt.getTime() === to.getTime()) classes.push('range-end');
     else if (dt > from && dt < to) classes.push('in-range');
   } else if (rangeFrom) {
-    const from = new Date(rangeFrom);
+    const from = parseDateLocal(rangeFrom);
     if (dt.getTime() === from.getTime()) classes.push('range-start');
   }
   return classes.join(' ');
