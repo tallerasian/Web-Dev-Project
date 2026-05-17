@@ -127,6 +127,9 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
 }
 
 /* ─────────────────────────────────────────
@@ -388,11 +391,15 @@ body {
   color: var(--brown-dark);
   margin-bottom: 4px;
   line-height: 1.3;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .side-panel-sub {
   font-size: 11px;
   color: var(--brown-mid);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Share code panel */
