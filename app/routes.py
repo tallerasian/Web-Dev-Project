@@ -135,7 +135,7 @@ def event_heatmap(event_id):
 def generate_event_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
-
+# generates a unique event code and creates the event in the DB
 @flask_app.route("/event/code")
 @login_required
 def event_code():
@@ -157,17 +157,20 @@ def event_code():
         event_type   = event_type,
     )
 
-    if event_type == 'days':
-        raw_from = request.args.get("from", "")
-        raw_to   = request.args.get("to", "")
-        event.date_from = date.fromisoformat(raw_from) if raw_from else None
-        event.date_to   = date.fromisoformat(raw_to)   if raw_to   else None
-    else:
-        event.days_of_week = request.args.get("days", "0,1,2,3,4,5,6")
-        raw_from = request.args.get("timeFrom", "09:00")
-        raw_to   = request.args.get("timeTo",   "17:00")
-        event.time_from = time.fromisoformat(raw_from)
-        event.time_to   = time.fromisoformat(raw_to)
+    try:
+        if event_type == 'days':
+            raw_from = request.args.get("from", "")
+            raw_to   = request.args.get("to", "")
+            event.date_from = date.fromisoformat(raw_from) if raw_from else None
+            event.date_to   = date.fromisoformat(raw_to)   if raw_to   else None
+        else:
+            event.days_of_week = request.args.get("days", "0,1,2,3,4,5,6")
+            raw_from = request.args.get("timeFrom", "09:00")
+            raw_to   = request.args.get("timeTo",   "17:00")
+            event.time_from = time.fromisoformat(raw_from)
+            event.time_to   = time.fromisoformat(raw_to)
+    except ValueError:
+        abort(400)
 
     db.session.add(event)
     db.session.flush()  # need event.id before we can create the membership row
@@ -221,6 +224,9 @@ def leave_event(event_id):
     return redirect(url_for("home_page"))
 
 
+# bridge between the create form (POST) and the heatmap preview pages (GET)
+# the event isn't saved to the DB yet — that only happens when the organiser
+# confirms and hits the "view code" button on the heatmap preview
 @flask_app.route("/event/new", methods=["POST"])
 @login_required
 def create_event_post():
@@ -252,11 +258,16 @@ def get_availability(event_id):
     group_data  = {}
     people_data = {}
 
+    # pre-fetch all users in one query instead of hitting the DB per row
+    user_ids    = {r.user_id for r in rows}
+    users_by_id = {u.id: u for u in User.query.filter(User.id.in_(user_ids)).all()}
+
     for r in rows:
         group_data[r.slot_key] = group_data.get(r.slot_key, 0) + 1
-        user    = User.query.get(r.user_id)
+        user    = users_by_id.get(r.user_id)
         display = "You" if r.user_id == current_user.id else (user.first_name if user else "?")
         bucket  = people_data.setdefault(r.slot_key, [])
+        # always put "You" at the front so it's easy to spot
         if r.user_id == current_user.id:
             bucket.insert(0, "You")
         else:
