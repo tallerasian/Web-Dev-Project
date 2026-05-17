@@ -178,7 +178,7 @@ def event_code():
     db.session.add(EventMember(event_id=event.id, user_id=current_user.id))
     db.session.commit()
 
-    return render_template("code.html.jinja", event=event, is_owner=True)
+    return redirect(url_for("event_view_code", event_id=event.id))
 
 
 @main.route("/event/<int:event_id>/code")
@@ -226,38 +226,21 @@ def leave_event(event_id):
 @main.route("/event/new", methods=["POST"])
 @login_required
 def create_event_post():
-    name       = request.form.get("name", "My Event")
     event_type = request.form.get("type", "days")
-
-    while True:
-        code = generate_event_code()
-        if not Event.query.filter_by(code=code).first():
-            break
-
-    event = Event(
-        organizer_id = current_user.id,
-        code         = code,
-        name         = name,
-        location     = request.form.get("location", ""),
-        details      = request.form.get("details", ""),
-        event_type   = event_type,
-    )
-
-    if event_type == 'days':
-        raw_from = request.form.get("from", "")
-        raw_to   = request.form.get("to",   "")
-        event.date_from = date.fromisoformat(raw_from) if raw_from else None
-        event.date_to   = date.fromisoformat(raw_to)   if raw_to   else None
+    params = {
+        "name":     request.form.get("name", "My Event"),
+        "location": request.form.get("location", ""),
+        "details":  request.form.get("details", ""),
+    }
+    if event_type == "days":
+        params["from"] = request.form.get("from", "")
+        params["to"]   = request.form.get("to",   "")
+        return redirect(url_for("heatmap_days", **params))
     else:
-        event.days_of_week = request.form.get("days", "0,1,2,3,4,5,6")
-        event.time_from = time.fromisoformat(request.form.get("timeFrom", "09:00"))
-        event.time_to   = time.fromisoformat(request.form.get("timeTo",   "17:00"))
-
-    db.session.add(event)
-    db.session.flush()
-    db.session.add(EventMember(event_id=event.id, user_id=current_user.id))
-    db.session.commit()
-    return redirect(url_for("main.event_heatmap", event_id=event.id))
+        params["days"]     = request.form.get("days", "0,1,2,3,4,5,6")
+        params["timeFrom"] = request.form.get("timeFrom", "09:00")
+        params["timeTo"]   = request.form.get("timeTo",   "17:00")
+        return redirect(url_for("heatmap_times", **params))
 
 
 @main.route("/event/<int:event_id>/availability", methods=["GET"])
