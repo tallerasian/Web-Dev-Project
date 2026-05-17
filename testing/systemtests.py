@@ -7,6 +7,7 @@ from multiprocessing import Process
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
 from datetime import date, time
 
 localhost = "http://localhost:5000"
@@ -173,6 +174,7 @@ class SeleniumTests(TestCase):
         self.assertIn("code", self.driver.current_url, "Failed to reach event code page")
 
     def test_joining_event(self):
+        """Test joining another user's event"""
         alice_id = add_user("AllAsAlice100", "alice.ann@student.uni.edu", "Alice", "Ann", "SuperSecurePassword123")
         bob_id = add_user("Baubles123", "bob.last@gmail.com", "Robert", "Lastname", "password")
         event_id = add_event(
@@ -226,7 +228,66 @@ class SeleniumTests(TestCase):
         self.assertTrue(isAliceInEvent, "Alice failed to join event")
         self.assertEqual(participantCount, 2, f"Expected 2 members in Bob's event, instead got {participantCount}")
 
+    def test_delete_event(self):
+        """Test leaving and deleting an event"""
+        alice_id = add_user("AllAsAlice100", "alice.ann@student.uni.edu", "Alice", "Ann", "SuperSecurePassword123")
+        bob_id = add_user("Baubles123", "bob.last@gmail.com", "Robert", "Lastname", "password")
+        bob_event_id = add_event(
+            bob_id, 
+            "Bob's Martial Arts", 
+            "123 Flowers St.", 
+            "Learn from the best", 
+            "days", 
+            (date(2026, 5, 1), date(2026, 5, 31)),
+            "0,1,2,3,4,5,6",
+            (time(9), time(17))
+        )
+        alice_event_id = add_event(
+            alice_id, 
+            "Alice's Study Group", 
+            "12 Perfect Ave.", 
+            "Learn WITH the best", 
+            "days", 
+            (date(2026, 5, 1), date(2026, 5, 31)),
+            "0,1,2,3,4,5,6",
+            (time(9), time(17))
+        )
+        db.session.add(EventMember(event_id = bob_event_id, user_id = alice_id))
+        db.session.add(EventMember(event_id = alice_event_id, user_id = bob_id))
+        db.session.commit()
 
+        login_username = self.driver.find_element(By.ID, "username")
+        login_password = self.driver.find_element(By.ID, "password")
+        signin_button = self.driver.find_element(By.ID, "signinBtn")
+
+        login_username.clear()
+        login_username.send_keys("AllAsAlice100")
+        login_password.clear()
+        login_password.send_keys("SuperSecurePassword123")
+        signin_button.click()
+
+        self.assertEqual(self.driver.current_url, localhost + "/home", "Failed to reach home page after logging in")
+
+        events = self.driver.find_elements(By.CLASS_NAME, "event-card-link")
+        self.assertEqual(len(events), 2, f"Expected Alice to be in 2 events, instead got {len(events)}")
+
+        leave_buttons = self.driver.find_elements(By.CLASS_NAME, "leave")
+        self.assertEqual(len(leave_buttons), 1, f"Expected 1 event with a leave button, instead got {len(leave_buttons)}")
+        delete_buttons = self.driver.find_elements(By.CLASS_NAME, "delete")
+        self.assertEqual(len(delete_buttons), 1, f"Expected 1 event with a delete button, instead got {len(delete_buttons)}")
+
+        leave_buttons[0].click()
+
+        left_event = EventMember.query.filter_by(user_id = alice_id).count()
+        self.assertEqual(left_event, 1, "Failed to leave event")
+        undeleted_events = Event.query.filter_by(id = bob_event_id).count()
+        self.assertEqual(undeleted_events, 1, "Leaving the event has deleted it")
+        
+        delete_buttons = self.driver.find_elements(By.CLASS_NAME, "delete")
+        delete_buttons[0].click()
+
+        deleted_event = Event.query.filter_by(id = alice_event_id).count()
+        self.assertEqual(deleted_event, 0, "Failed to delete event")
 
     def tearDown(self):
         self.server_thread.terminate()
