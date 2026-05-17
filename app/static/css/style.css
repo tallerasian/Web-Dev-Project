@@ -1225,16 +1225,6 @@ body.code-page .btn-primary:hover {
 /* ============================================
    REGISTER PAGE STYLES
 ============================================ */
-:root {
-  --bg-orange: #ffa309;
-  --bg-white: #fffef5;
-  --calender-dark-orange: #d8540e;
-  --calender-orange: #f68b26;
-  --calender-light-orange: #ffbe4a;
-  --calender-yellow: #fddc8a;
-  --calender-white: #fef2db;
-  --reg-black: #000000;
-}
 
 * {
   margin: 0;
